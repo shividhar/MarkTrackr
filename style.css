@@ -1,0 +1,165 @@
+html, body
+{
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+#content
+{
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	min-width: 800px;
+	height: 100%;
+	display: block;
+}
+
+#header
+{
+	background-color: #EEEEEE;
+	height: 50px;
+	width: 100%;
+	display: block;
+}
+
+#sidebar
+{
+	background-color: #DDDDDD;
+	overflow-y: scroll;
+	width: 200px;
+	height: calc(100% - 50px);
+	display: block;
+	float: left;
+}
+
+.class
+{
+	background-color: #CCCCCC;
+	width: 100%;
+	height: 50px;
+}
+
+#main
+{
+	width: calc(100% - 200px);
+	height: calc(100% - 50px);
+	float: right;
+	background-color: #CCCCCC;
+	overflow-y: scroll;
+}
+
+#top
+{
+	width: 100%;
+	height: 490px;
+	background-color: #DDDDDD;
+	padding-top: 10px;
+	text-align: center;
+}
+
+#className
+{
+	text-align: center;
+	margin: 0;
+}
+
+#classCourseCode
+{
+	text-align: center;
+	margin: 0;
+}
+
+#percentage
+{
+}
+
+#percentageVal
+{
+	font-size:200px;
+	position: relative;
+	text-align: center;
+	top: -325px;
+}
+
+#bottom
+{
+	width: 100%;
+	min-height: calc(100% - 500px);
+	background-color: #BBBBBB;
+}
+
+#assessmentsTitle
+{
+	width: 100%;
+	height: 30px;
+	font-size: 30px;
+	text-align: center;
+	background-color: #AAAAAA;
+	border-top: 5px #AAAAAA solid;
+	border-bottom: 5px #AAAAAA solid;
+}
+
+.assessment
+{
+	width: 100%;
+	height: 30px;
+	background-color: #999999;
+	border-bottom: 1px black solid;
+}
+
+.assessmentName
+{
+	height: 30px;
+	float: left;
+}
+
+.assessmentDate
+{
+	height: 25px;
+	padding: 2.5px;
+	border-left: 3px black solid;
+	float: right;
+	font-size: 25px;
+}
+
+.assessmentRemove
+{
+	height: 25px;
+	padding: 2.5px;
+	border-left: 3px black solid;
+	float: right;
+}
+.assessmentEdit
+{
+	height: 25px;
+	padding: 2.5px;
+	border-left: 3px black solid;
+	float: right;
+}
+
+::-webkit-scrollbar
+{
+	width: 15px;
+}
+
+::-webkit-scrollbar-track
+{
+	background-color: #666666;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #888888;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}
+
+::-webkit-scrollbar-button
+{
+	height: 0;
+	width: 0;
+}
