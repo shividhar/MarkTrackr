@@ -39,7 +39,8 @@ html, body
 {
 	background-color: #CCCCCC;
 	width: 100%;
-	height: 50px;
+	height: 30px;
+	border-bottom: 1px solid black;
 }
 
 #main
@@ -74,6 +75,7 @@ html, body
 
 #percentage
 {
+	
 }
 
 #percentageVal
@@ -139,6 +141,7 @@ html, body
 	border-left: 3px black solid;
 	float: right;
 }
+
 
 ::-webkit-scrollbar
 {
