@@ -2,7 +2,7 @@ if (Meteor.isClient) {
   // counter starts at 0
   Session.setDefault('counter', 0);
   
-  Template.body.helpers({
+  Template.mainView.helpers({
 	  classList: function()
 	  {
 		  return [{className: "ICS 4U1 - 01"}, {className: "HZT 4U1 - 01"}, {className: "MFU 4U1 - 01"}];
