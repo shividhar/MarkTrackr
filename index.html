@@ -1,138 +1,68 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title></title>
-		<link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" type="text/css" href="style.css"/>
-		<script type="text/javascript">
-
-		function init()
-		{
-			generatePercentageCircle(document.getElementById('percentage'), 190, 130, .93, 'rgb(154,205,50)', 'rgb(119,157,38)', 5);
-		}
-		
-		function generatePercentageCircle(canvas, radius, clearRadius, percentage, colour, border, borderWidth)
-		{
-			var c = canvas.getContext('2d');
-			var centreX = canvas.width / 2;
-			var centreY = canvas.height / 2;
-
-			c.beginPath();
-			c.arc(centreX, centreY, radius, -.5*Math.PI, (percentage) * 2 * Math.PI - .5*Math.PI);
-			c.arc(centreX, centreY, clearRadius, (percentage) * 2 * Math.PI - .5*Math.PI, -.5*Math.PI, true);
-			c.fillStyle = colour;
-			c.strokeStyle = border;
-			c.lineWidth = borderWidth;
-			c.closePath();
-			c.fill();
-			c.stroke();
-		}
-
-		function generatePieChart(canvas, radius, clearRadius, percentages, colours)
-		{
-			var c = canvas.getContext('2d');
-			var centreX = canvas.width / 2;
-			var centreY = canvas.height / 2;
-
-			var arcPointRadius = Math.sqrt(2 * radius * radius);
-			var currentPercent = 0;
-			for(var i = 0; i < percentages.length; i++)
-			{
-				c.beginPath();
-				c.moveTo(centreX, centreY);
-				c.arc(centreX, centreY, radius, currentPercent * 2 * Math.PI, (currentPercent + percentages[i]) * 2 * Math.PI);
-				c.lineTo(centreX, centreY);
-
-				c.fillStyle = colours[i];
-				c.closePath();
-				c.fill();
-
-				currentPercent += percentages[i];
-			}
-			c.beginPath();
-			c.arc(centreX, centreY, clearRadius, 0, 2 * Math.PI);
-			c.clip();
-			c.clearRect(0, 0, canvas.width, canvas.height);
-		}
-		</script>
-	</head>
-	<body onload='init()'>
-		<div id='content'>
-			<div id='header'></div>
-			<div id='sidebar'>
-				<div class='class'>
-				ICS 4U1 - 01
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-				<div class='class'>
-				</div>
-			</div>
-			<div id='main'>
-				<div id='top'>
-					<h2 id='className'>
-						Introduction to Computer Science
-					</h2>
-					<h3 id='classCourseCode'>
-						ICS 4U1 - 01
-					</h3>
-					<canvas id='percentage' width='400' height='400'></canvas>
-					<div id='percentageVal'>
-						93</div>
-				</div>
-				<div id='bottom'>
-					<div id='assessmentsTitle'>
-						Assessments
-					</div>
-					<div class='assessment'>
-						<div class='assessmentName'>
-							Test #1
-						</div>
-						<div class='assessmentRemove'>
-							<svg width='25' height='25' viewBox='0 0 1 1'>
-								<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
-								<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
-							</svg>
-						</div>
-						<div class='assessmentEdit'>
-							<svg width='25' height='25' viewBox='0 0 1 1'>
-								<polygon points='1,0 .67,.1 .89,.31'/>
-								<polygon points='.87,.37 .63,.13 .13,.63 .37,.87'/>
-								<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05'/>
-							</svg>
-						</div>
-						<div class='assessmentDate'>
-							January 12, 2015
-						</div>
-					</div>
-					<div class='assessment'>
-					</div>
-				</div>
-			</div>
+<body>
+	<div id='content'>
+		<div id='header'></div>
+		<div id='sidebar'>
+			{{#each classList}}
+				{{> classElement}}
+			{{/each}}
 		</div>
-	</body>
-</html>
+		{{> mainContent}}
+	</div>
+</body>
+<template name="classElement">
+	<div class="class">
+		<div class='classListName'>{{ className }}</div>
+		<div class='classRemove'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			</svg>
+		</div>
+	</div>
+</template>
+<template name="mainContent">
+	<div id='main'>
+		<div id='top'>
+			<h2 id='className'>
+				Introduction to Computer Science
+			</h2>
+			<h3 id='classCourseCode'>
+				ICS 4U1 - 01
+			</h3>
+			<canvas id='percentage' width='400' height='400'></canvas>
+			<div id='percentageVal'>
+				93</div>
+		</div>
+		<div id='bottom'>
+			<div id='assessmentsTitle'>
+				Assessments
+			</div>
+			{{#each assessmentList}}
+				{{> assessment}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+<template name="assessment">
+	<div class='assessment'>
+		<div class='assessmentName'>
+			{{assessmentName}}
+		</div>
+		<div class='assessmentRemove'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			</svg>
+		</div>
+		<div class='assessmentEdit'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<polygon points='1,0 .67,.1 .89,.31'/>
+				<polygon points='.87,.37 .63,.13 .13,.63 .37,.87'/>
+				<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05'/>
+			</svg>
+		</div>
+		<div class='assessmentDate'>
+			{{assessmentDate}}
+		</div>
+	</div>
+</template>
