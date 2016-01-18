@@ -1,0 +1,30 @@
+Meteor.methods({
+    createAssessment: function(assessmentData){
+    	if(Meteor.isServer){
+	    	//Login Control
+	    	if (!Meteor.userId()) {
+		      throw new Meteor.Error("Please login to do that.");
+		    }
+		    if(!!assessmentData.title || !!assessmentData.parentClassId){
+		    	throw new Meteor.Error("Error: Failed to create class");
+		    }
+		    if(assessmentData.title == "" || assessmentData.courseCode == ""){
+		    	throw new Meteor.Error("Error: Failed to create class");
+		    }
+
+		    var fields = {
+		    	"createdAt": new Date(),
+		    	"authorId": Meteor.userId(),
+		    	"title": assessmentData.title,
+		    	// "courseCode": assessmentData.courseCode,
+		    	"categories": assessmentData.categories,
+		    	"categoryWeightings": assessmentData.categoryWeightings,
+		    	"assessmentTypes": assessmentData.assessmentTypes,
+		    	"assessmentWeights": assessmentData.assessmentWeights
+		    }
+
+		    Classes.insert(fields)
+	    }
+
+	}
+})

@@ -32,7 +32,12 @@ if(Meteor.isServer){
         assessmentCategoryDenominators: {
             type: [Number],
             defaultValue: [],
-            defaultValue: true
+            defaultValue: []
+        },
+        assessmentsCategoryMarks: {
+            type: [Number],
+            defaultValue: [],
+            defaultValue: []
         }
     })
 
