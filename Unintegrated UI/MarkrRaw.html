@@ -15,6 +15,31 @@
 		</div>
 		{{> mainContent}}
 	</div>
+	<div id='overlay' style='visibility: {{overlayVisibility}}'>
+		<div id='editAssessmentPanel'>
+			<input id='editAssessmentNameField' type='text' value='Introduction to Computer Science'/><br>
+			<input id='editAssessmentCodeField' type='text' value='ICS 4U1 - 01'/><br>
+			<select id='editAssessmentWeightField'>
+				<option value='q'>Quiz</option>
+				<option value='t'>Test</option>
+				<option value='a'>Assignment</option>
+			</select>
+			<div id='editCategories'>
+				<div id='editKnowledge'>
+					<input id='editKnowledgeEnabled' type='checkbox'>
+				</div>
+				<div id='editThinking'>
+					<input id='editThinkingEnabled' type='checkbox' checked="true">
+				</div>
+				<div id='editCommunication'>
+					<input id='editCommunicationEnabled' type='checkbox' checked="true">
+				</div>
+				<div id='editApplication'>
+					<input id='editApplicationEnabled' type='checkbox' checked="true">
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <template name='splashPage'>
@@ -81,38 +106,43 @@
 			{{assessmentName}}
 		</div>
 		<div class='assessmentRemove'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
+			<svg class='assessmentRemoveSymbol' width='25' height='25' viewBox='0 0 1 1'>
 				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
 				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 			</svg>
 		</div>
 		<div class='assessmentEdit'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
+			<svg class='assessmentEditSymbol' width='25' height='25' viewBox='0 0 1 1'>
 				<polygon points='1,0 .67,.1 .89,.31'/>
 				<polygon points='.87,.37 .63,.13 .13,.63 .37,.87'/>
 				<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05'/>
 			</svg>
 		</div>
 		<div class='assessmentWeightage'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
+			<svg class='assessmentWeightSymbol' width='25' height='25' viewBox='0 0 1 1'>
 				<polygon points='0,.9125 1,.9125 .7781,.2625 .22119,.2625'/>
-				<path points='M .425 .2625 L .425 .1625' stroke='black' stroke-width="5"/>
+				<path d='M 0.425 0.2625 L 0.425 0.1625 A .075 .075 -3.14 1 1 .575 .162 L .575 .2625' stroke='black' stroke-width=".1" fill-opacity="0"/>
 			</svg>
-		</div>
-		<div class='barBG' style='border-color: #A85443;'>
-			<div class='barFG' style='width: calc({{assessmentAMark}} * 150px); border-color: #D14628;'>
+			<div class='assessmentWeightageVal'>
+				3.2
 			</div>
 		</div>
-		<div class='barBG' style='border-color: #4C8A99;'>
-			<div class='barFG' style='width: calc({{assessmentCMark}} * 150px); border-color: #3FA3BB;'>
+		<div class='markBars'>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
+				<div class='barFG' style='width: /*calc({{assessmentAMark}} * 150px)*/0; border-color: #D14628;'>
+				</div>
 			</div>
-		</div>
-		<div class='barBG' style='border-color: #CCA241;'>
-			<div class='barFG' style='width: calc({{assessmentTMark}} * 150px); border-color: #F0B21A;'>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>
+				<div class='barFG' style='width: /*calc({{assessmentAMark}} * 150px)*/0; border-color: #3FA3BB;'>
+				</div>
 			</div>
-		</div>
-		<div class='barBG' style='border-color: #5C8743;'>
-			<div class='barFG' style='width: calc({{assessmentKMark}} * 150px); border-color: #6BB145;'>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #CCA241;'>
+				<div class='barFG' style='width: /*calc({{assessmentAMark}} * 150px)*/0; border-color: #F0B21A;'>
+				</div>
+			</div>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #5C8743;'>
+				<div class='barFG' style='width: /*calc({{assessmentAMark}} * 150px)*/0; border-color: #6BB145;'>
+				</div>
 			</div>
 		</div>
 		<div class='assessmentDate'>
