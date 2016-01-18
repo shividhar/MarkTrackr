@@ -1,0 +1,124 @@
+<head>
+  <title>MarkrRaw</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	{{> mainView}}
+</body>
+
+<template name='mainView'>
+	<div id='content'>
+		<div id='header'>
+			<div id='login'>
+			</div>
+		</div>
+		{{> mainContent}}
+	</div>
+</template>
+
+<template name='splashPage'>
+	<div id='splashTop'>
+		<div id='title'>Markr</div>
+		<div id='subtitle'>The mark tracking application for students</div>
+		<div id='categoriesContainer'>
+			<canvas width='200' height='200' id='p1'></canvas>
+			<canvas width='200' height='200' id='p2'></canvas>
+			<canvas width='200' height='200' id='p3'></canvas>
+			<canvas width='200' height='200' id='p4'></canvas>
+		</div>
+		<div id='bigLogin'><span>Start Tracking Now!</span></div>
+	</div>
+	<div id='splashBottom'>
+		<div id='text1'>
+			Markr allows students to track their marks alongside their teachers to better understand the process and how to improve in the future. Markr allows students to record their marks online and access them on the go, particularly in school.
+		</div>
+	</div>
+</template>
+
+<template name="classElement">
+	<div class="class">
+		<div class='classListName'>{{ className }}</div>
+		<div class='classRemove'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			</svg>
+		</div>
+	</div>
+</template>
+
+<template name="mainContent">
+	<div id='sidebar'>
+		{{#each classList}}
+			{{> classElement}}
+		{{/each}}
+	</div>
+	<div id='main'>
+		<div id='top'>
+			<h2 id='className'>
+				Introduction to Computer Science
+			</h2>
+			<h3 id='classCourseCode'>
+				ICS 4U1 - 01
+			</h3>
+			<canvas id='percentage' width='400' height='400'></canvas>
+		</div>
+		<div id='bottom'>
+			<div id='assessmentsTitle'>
+				Assessments
+			</div>
+			{{#each assessmentList}}
+				{{> assessment}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+
+<template name="assessment">
+	<div class='assessment'>
+		<div class='assessmentName'>
+			{{assessmentName}}
+		</div>
+		<div class='assessmentRemove'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			</svg>
+		</div>
+		<div class='assessmentEdit'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<polygon points='1,0 .67,.1 .89,.31'/>
+				<polygon points='.87,.37 .63,.13 .13,.63 .37,.87'/>
+				<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05'/>
+			</svg>
+		</div>
+		<div class='assessmentWeightage'>
+			<svg width='25' height='25' viewBox='0 0 1 1'>
+				<polygon points='0,.9125 1,.9125 .7781,.2625 .22119,.2625'/>
+				<path points='M .425 .2625 L .425 .1625' stroke='black' stroke-width="5"/>
+			</svg>
+		</div>
+		<div class='barBG' style='border-color: #A85443;'>
+			<div class='barFG' style='width: calc({{assessmentAMark}} * 150px); border-color: #D14628;'>
+			</div>
+		</div>
+		<div class='barBG' style='border-color: #4C8A99;'>
+			<div class='barFG' style='width: calc({{assessmentCMark}} * 150px); border-color: #3FA3BB;'>
+			</div>
+		</div>
+		<div class='barBG' style='border-color: #CCA241;'>
+			<div class='barFG' style='width: calc({{assessmentTMark}} * 150px); border-color: #F0B21A;'>
+			</div>
+		</div>
+		<div class='barBG' style='border-color: #5C8743;'>
+			<div class='barFG' style='width: calc({{assessmentKMark}} * 150px); border-color: #6BB145;'>
+			</div>
+		</div>
+		<div class='assessmentDate'>
+			<div class='assessmentDateInner'>
+				{{assessmentDate}}
+			</div>
+		</div>
+	</div>
+</template>
