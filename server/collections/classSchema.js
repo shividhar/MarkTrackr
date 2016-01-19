@@ -15,9 +15,24 @@ if(Meteor.isServer){
             type: String,
             optional: false
         },
-        courseCode: {
+        assessmentTypes: {
+            type: [Object],
+            defaultValue: [],
+            optional: false
+        },
+        "assessmentTypes.$.typeName": {
             type: String,
-            optional: true
+            optional: false
+        },
+        "assessmentTypes.$.weight": {
+            type: Number,
+            optional: true,
+            decimal: true
+        },
+        "assessmentTypes.$.categories": {
+            type: [String],
+            defaultValue: [],
+            optional: false
         },
         assessments: {
             type: [String],
@@ -26,23 +41,14 @@ if(Meteor.isServer){
             optional: true
         },
         categories: {
-            type: String,
+            type: [String],
             optional: true
         },
         categoryWeightings: {
             type: [Number],
             defaultValue: [],
-            optional: true
-        },
-        assessmentType: {
-            type: [String],
-            defaultValue: [],
-            optional: true
-        },
-        assessmentWeight: {
-            type: [Number],
-            defaultValue: [],
-            optional: true
+            optional: true,
+            decimal: true
         }
     })
 

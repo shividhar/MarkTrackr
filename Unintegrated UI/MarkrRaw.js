@@ -19,6 +19,65 @@ if (Meteor.isClient) {
     }
   });
   
+  Template.mainView.helpers({
+	  overlayVisibility: function()
+	  {
+		  if(Session.get('doOverlay'))
+		  {
+			  return 'visible';
+		  }
+		  else
+		  {
+			  return 'hidden';
+		  }
+	  }
+  });
+  
+  Template.mainView.events({
+	  'click #overlay' : function(event)
+	  {
+		  if($(event.target).attr("id") == "overlay"){
+			event.thing = true;
+			Session.set('doOverlay', false);
+		  }
+	  }
+	  
+	  , 'click #editAssessmentPanel' : function(event)
+	  {
+		  /*
+		  if(event.thing)
+		  {
+			  return false;
+		  }
+		  else
+		  {
+			  event.thing = true;
+		  }*/
+		  //return false;
+		  /* event.preventDefault(); */
+	  }
+	  
+	  , 'click #editKnowledgeEnabled' : function(event)
+	  {
+		  
+	  }
+	  
+	  , 'click #editThinkingEnabled' : function(event)
+	  {
+		  
+	  }
+	  
+	  , 'click #editCommunicationEnabled' : function(event)
+	  {
+		  
+	  }
+	  
+	  , 'click #editApplicationEnabled' : function(event)
+	  {
+		  event.target.style.backgroundColor = '#D1978A';
+	  }
+  });
+  
   Template.mainContent.rendered = function()
   {
     var percentageCanvas = $('#percentage');
@@ -38,6 +97,18 @@ if (Meteor.isClient) {
       //return assessmentMark[0] / assessmentCategoryDenominators[0];
       return .97;
     }
+	
+	, assessmentCategoryCount: function()
+	{
+		return 4;
+	}
+  });
+  
+  Template.assessment.events({
+	  'click .assessmentEditSymbol' : function(event)
+	  {
+		  Session.set('doOverlay', true);
+	  }
   });
 }
 

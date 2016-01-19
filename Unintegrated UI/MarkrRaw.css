@@ -23,7 +23,7 @@ html, body
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
-	min-width: 800px;
+	min-width: 1000px;
 	height: 100%;
 	display: block;
 	animation-name: fadein;
@@ -221,22 +221,20 @@ html, body
 {
 	height: 30px;
 	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 25px;
+	width: 200px;
+	text-align: center;
 }
 
-.assessmentDate
+.markBars
 {
-	height: 25px;
-	padding: 2.5px;
-	/*border-left: 1px #B2AB90 solid;*/
-	padding-right: 10px;
-	padding-left: 10px;
-	float: right;
-	font-size: 25px;
+	
 }
 
 .barBG
 {
-	width: 150px;
 	height: 0px;
 	border: 5px solid;
 	border-radius: 5px;
@@ -248,13 +246,24 @@ html, body
 
 .barFG
 {
-	width: 130px;
 	height: 0px;
 	border: 5px solid;
 	border-radius: 5px;
 	position: relative;
 	left: -5px;
 	top: -5px;
+}
+
+.assessmentDate
+{
+	width: 210px;
+	height: 25px;
+	padding: 2.5px;
+	/*border-left: 1px #B2AB90 solid;*/
+	padding-right: 10px;
+	padding-left: 10px;
+	float: left;
+	font-size: 25px;
 }
 
 .assessmentDateInner
@@ -282,6 +291,89 @@ html, body
 	float: right;
 }
 
+.assessmentWeightage
+{
+	height: 25px;
+	padding: 2.5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	float:right;
+}
+
+.assessmentWeightageVal
+{
+	padding-left: 2.5px;
+	padding-right: 2.5px;
+	float:right;
+}
+
+#overlay
+{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background-color: rgba(0, 0, 0, .5);
+}
+
+#editAssessmentPanel
+{
+	width: 400px;
+	height: 300px;
+	background-color: #FFFFFF;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: calc(50% - 150px);
+	text-align: center;
+}
+#editAssessmentNameField
+{
+	border: 0;
+	text-align: center;
+	width: 100%;
+	font-size: 20px;
+}
+#editAssessmentCodeField
+{
+	border: 0;
+	text-align: center;
+	width: 100%;
+	font-size: 17px;
+}
+#editCategories
+{
+	margin-top: 15px;
+}
+#editKnowledge
+{
+	background-color: #6BB145;
+	width: 100px;
+	height: 215px;
+	float: left;
+}
+#editThinking
+{
+	background-color: #F0B21A;
+	width: 100px;
+	height: 215px;
+	float: left;
+}
+#editCommunication
+{
+	background-color: #3FA3BB;
+	width: 100px;
+	height: 215px;
+	float: left;
+}
+#editApplication
+{
+	background-color: #D14628;
+	width: 100px;
+	height: 215px;
+	float: left;
+}
 
 ::-webkit-scrollbar
 {

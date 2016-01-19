@@ -20,19 +20,15 @@ if(Meteor.isServer){
             type: String,
             optional: false
         },
-        assessmentWeight: {
-            type: Number,
+        type: {
+            type: String,
             optional: true
         },
-        assessmentCategories: {
-            type: [String],
-            defaultValue: [],
-            optional: true
-        },
-        assessmentCategoryDenominators: {
+        categoryPercentages: {
             type: [Number],
             defaultValue: [],
-            defaultValue: true
+            optional: true,
+            decimal: true
         }
     })
 
