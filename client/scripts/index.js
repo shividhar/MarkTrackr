@@ -20,7 +20,7 @@ if (Meteor.isClient)
 		}
 		, overlayVisibility: function()
 		{
-			if(Session.get('showEditAssessmentPanel') || Session.get('showCreateClassPanel'))
+			if(Session.get('showEditAssessmentPanel') || Session.get('showEditClassPanel') || Session.get('showCreateClassPanel') || Session.get('showCreateAssessmentPanel'))
 			{
 				return 'block';
 			}
@@ -34,10 +34,18 @@ if (Meteor.isClient)
 		{
 			return Session.get('showEditAssessmentPanel') ? 'block' : 'none';
 		}
+		, editingClassVisibility: function()
+		{
+			return Session.get('showEditClassPanel') ? 'block' : 'none';
+		}
 
 		, createClassVisibility: function()
 		{
 			return Session.get('showCreateClassPanel') ? 'block' : 'none';
+		}
+		, createAssessmentVisibility: function()
+		{
+			return Session.get('showCreateAssessmentPanel') ? 'block' : 'none';
 		}
 
 		, checkIfViewingClass: function()
@@ -49,6 +57,11 @@ if (Meteor.isClient)
 		{
 			return Session.get('ccawt');
 		}
+
+		, editingAssessmentWeightTypeOptions: function()
+		{
+			return Classes.findOne({_id: this.classes._id}).assessmentTypes;
+		}
 	});
 
 	Template.mainView.events({
@@ -57,33 +70,15 @@ if (Meteor.isClient)
 			if($(event.target).attr("id") == "overlay"){
 				event.thing = true;
 				Session.set('showEditAssessmentPanel', false);
+				Session.set('showEditClassPanel', false);
 				Session.set('showCreateClassPanel', false);
+				Session.set('showCreateAssessmentPanel', false);
 			}
 		}
 
 		, 'click #editAssessmentPanel' : function(event)
 		{
 
-		}
-
-		, 'click #editKnowledgeEnabled' : function(event)
-		{
-
-		}
-
-		, 'click #editThinkingEnabled' : function(event)
-		{
-
-		}
-
-		, 'click #editCommunicationEnabled' : function(event)
-		{
-
-		}
-
-		, 'click #editApplicationEnabled' : function(event)
-		{
-			
 		}
 
 		, 'click #classCreate' : function(event)
@@ -465,6 +460,7 @@ if (Meteor.isClient)
 		{
 			//Session.set('editingAssessmentId', )
 			Session.set('showEditAssessmentPanel', true);
+			$('#editAssessmentNameField')[0].value = this.title;
 		}
 
 		, 'click .assessmentRemoveSymbol' : function(event)

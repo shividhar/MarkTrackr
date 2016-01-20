@@ -28,9 +28,8 @@
 	</div>
 	<div id='overlay' style='display: {{overlayVisibility}}'>
 		<div id='editAssessmentPanel' style='display: {{editingAssessmentVisibility}}'>
-			<input id='editAssessmentNameField' type='text' value="{{editingAssessmentName}}"/><br>
-			<input id='editAssessmentDateField' type='date' value="{{editingAssessmentDate}}" />
-			<select id='editAssessmentWeightField' value='{{editingAssessmentWeightType}}'>
+			<input id='editAssessmentNameField' type='text'/><br>
+			<select id='editAssessmentWeightField'>
 				{{#each editingAssessmentWeightTypeOptions}}
 					{{> editAssessmentWeightTypeOption}}
 				{{/each}}
@@ -38,7 +37,6 @@
 			<div id='editCategories'>
 				<div id='editKnowledge'>
 					<div id='editKnowledgeTitle'>Knowledge</div>
-					<input id='editKnowledgeEnabled' type='checkbox' checked>
 					<div id='editKnowledgePanel'>
 						Percentage:<br>
 						<input type='number' id='editKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
@@ -46,7 +44,6 @@
 				</div>
 				<div id='editThinking'>
 					<div id='editThinkingTitle'>Thinking</div>
-					<input id='editThinkingEnabled' type='checkbox' checked>
 					<div id='editThinkingPanel'>
 						Percentage<br>
 						<input type='number' id='editThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
@@ -54,7 +51,6 @@
 				</div>
 				<div id='editCommunication'>
 					<div id='editCommunicationTitle'>Communication</div>
-					<input id='editCommunicationEnabled' type='checkbox' checked>
 					<div id='editCommunicationPanel'>
 						Percentage<br>
 						<input type='number' id='editCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
@@ -62,7 +58,6 @@
 				</div>
 				<div id='editApplication'>
 					<div id='editApplicationTitle'>Application</div>
-					<input id='editApplicationEnabled' type='checkbox' checked>
 					<div id='editApplicationPanel'>
 						Percentage<br>
 						<input type='number' id='editApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
@@ -138,6 +133,48 @@
 			<div id='createClassError'>
 			</div>
 		</div>
+		<div id='createAssessmentPanel' style='display: {{createAssessmentVisibility}}'>
+			<input id='editAssessmentNameField' type='text'/><br>
+			<select id='editAssessmentWeightField' value='{{editingAssessmentWeightType}}'>
+				{{#each createAssessmentWeightTypeOptions}}
+					{{> createAssessmentWeightTypeOption}}
+				{{/each}}
+			</select>
+			<div id='editCategories'>
+				<div id='editKnowledge'>
+					<div id='editKnowledgeTitle'>Knowledge</div>
+					<input id='editKnowledgeEnabled' type='checkbox' checked>
+					<div id='editKnowledgePanel'>
+						Percentage:<br>
+						<input type='number' id='editKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
+					</div>
+				</div>
+				<div id='editThinking'>
+					<div id='editThinkingTitle'>Thinking</div>
+					<input id='editThinkingEnabled' type='checkbox' checked>
+					<div id='editThinkingPanel'>
+						Percentage<br>
+						<input type='number' id='editThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
+					</div>
+				</div>
+				<div id='editCommunication'>
+					<div id='editCommunicationTitle'>Communication</div>
+					<input id='editCommunicationEnabled' type='checkbox' checked>
+					<div id='editCommunicationPanel'>
+						Percentage<br>
+						<input type='number' id='editCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
+					</div>
+				</div>
+				<div id='editApplication'>
+					<div id='editApplicationTitle'>Application</div>
+					<input id='editApplicationEnabled' type='checkbox' checked>
+					<div id='editApplicationPanel'>
+						Percentage<br>
+						<input type='number' id='editApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -165,7 +202,7 @@
 </template>
 
 <template name='editAssessmentWeightTypeOption'>
-	<option value='{{s1}}'>{{s2}}</option>
+	<option value='{{typeName}}'>{{typeName}}</option>
 </template>
 
 <template name='splashPage'>
