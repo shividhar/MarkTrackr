@@ -12,7 +12,7 @@ if(Meteor.isServer){
 			throw new Meteor.Error("Account creation failed.");
 		}
 	})
-	if(process.platform == "darwin"){
+	if(process.platform == "darwin" || process.platform == "win32"){
 		ServiceConfiguration.configurations.remove({
 			service: "google"
 		});

@@ -5,6 +5,17 @@ html, body
 	width: 100%;
 	height: 100%;
 	display: block;
+	font-family: 'Open Sans', sans-serif;
+}
+@keyframes fadein
+{
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+@keyframes bigLoginHover
+{
+	from { background-color: #EE964B; }
+	to { background-color: #F95738 }
 }
 
 #content
@@ -12,40 +23,116 @@ html, body
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
-	min-width: 800px;
+	min-width: 1000px;
 	height: 100%;
 	display: block;
+	animation-name: fadein;
+	animation-duration: 2s;
 }
 
 #header
 {
-	background-color: #EEEEEE;
+	background-color: #EE964B;
 	height: 50px;
 	width: 100%;
+	border-bottom: 2px solid #BC5800;
 	display: block;
 }
 
 #login
 {
-	background-color: #CCCCCC;
+	background-color: #ED6E00;
 	width: 200px;
 	height: 50px;
 	float: right;
 }
 
+#splashTop
+{
+	width: 100%;
+	height: 440px;
+	background-color: #082744;
+	color: #FAF0CA;
+	padding-top: 5px;
+	text-align: center;
+	border-bottom: 2px solid #CCC3A5;
+}
+
+#title
+{
+	font-size: 70px;
+}
+
+#subtitle
+{
+	font-size: 30px;
+}
+
+#categoriesContainer
+{
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 820px;
+	font-family: 'Orbitron', sans-serif;
+}
+
+#bigLogin
+{
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	background-color: #EE964B;
+	color: black;
+	margin-top: 20px;
+	font-size: 25px;
+	width: 300px;
+	height: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	-o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+}
+
+#bigLogin:hover
+{
+	background-color: #F95738;
+}
+
+#splashBottom
+{
+	background-color: #FAF0CA;
+	min-height: calc(100% - 519px);
+	padding-top: 20px;
+}
+
+#text1
+{
+	width: 700px;
+	font-size: 25px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* DIVISION BETWEEN PAGES */
+
 #sidebar
 {
-	background-color: #DDDDDD;
-	overflow-y: scroll;
+	background-color: #FAF0CA;
 	width: 200px;
-	height: calc(100% - 50px);
+	height: calc(100% - 52px);
+	border-right: 1px solid #C4BC9F;
+	overflow-y: auto;
 	display: block;
 	float: left;
 }
 
 .class
 {
-	background-color: #CCCCCC;
+	background-color: #FAF0CA;
 	width: 100%;
 	height: 30px;
 	border-bottom: 1px solid black;
@@ -55,32 +142,46 @@ html, body
 {
 	float: left;
 	width: 160px;
-	font-size: 25px;
+	font-size: 20px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-align: center;
 }
 .classRemove
 {
 	float: right;
+	height: 25px;
 	margin-right:2.5px;
 	margin-top:2.5px;
 }
 
+#classCreate
+{
+	background-color: #FAF0CA;
+	width: 100%;
+	height: 25px;
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	border-bottom: 1px solid black;
+	text-align: center;
+}
+
 #main
 {
-	width: calc(100% - 200px);
-	height: calc(100% - 50px);
+	width: calc(100% - 201px);
+	height: calc(100% - 52px);
 	float: right;
 	background-color: #CCCCCC;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 #top
 {
 	width: 100%;
 	height: 490px;
-	background-color: #DDDDDD;
+	background-color: #082744;
+	color: #FAF0CA;
 	padding-top: 10px;
 	text-align: center;
 }
@@ -89,12 +190,12 @@ html, body
 {
 	text-align: center;
 	margin: 0;
-}
-
-#classCourseCode
-{
-	text-align: center;
-	margin: 0;
+	border: 0;
+	background-color: #082744;
+	border-bottom: 1px #FAF0CA solid;
+	font-size: 30px;
+	color: #FAF0CA;
+	outline: none;
 }
 
 #percentage
@@ -102,70 +203,415 @@ html, body
 	
 }
 
-#percentageVal
-{
-	font-size:200px;
-	position: relative;
-	text-align: center;
-	top: -325px;
-}
-
 #bottom
 {
 	width: 100%;
 	min-height: calc(100% - 500px);
-	background-color: #BBBBBB;
+	background-color: #EE964B;
 }
 
 #assessmentsTitle
 {
 	width: 100%;
-	height: 30px;
+	height: 45px;
 	font-size: 30px;
 	text-align: center;
-	background-color: #AAAAAA;
-	border-top: 5px #AAAAAA solid;
-	border-bottom: 5px #AAAAAA solid;
+	background-color: #EE964B;
+	border-top: 5px #EE964B solid;
+	border-bottom: 3px #EE964B solid;
 }
 
 .assessment
 {
 	width: 100%;
 	height: 30px;
-	background-color: #999999;
-	border-bottom: 1px black solid;
+	background-color: #ED6E00;
+	border-bottom: 1px #EE964B solid;
 }
 
 .assessmentName
 {
 	height: 30px;
 	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 25px;
+	width: 200px;
+	text-align: center;
+}
+
+.markBars
+{
+	
+}
+
+.barBG
+{
+	height: 0px;
+	border: 5px solid;
+	border-radius: 5px;
+	float: right;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-right: 15px;
+}
+
+.barFG
+{
+	height: 0px;
+	border: 5px solid;
+	border-radius: 5px;
+	position: relative;
+	left: -5px;
+	top: -5px;
 }
 
 .assessmentDate
 {
+	width: 210px;
 	height: 25px;
 	padding: 2.5px;
-	border-left: 3px black solid;
-	float: right;
+	/*border-left: 1px #B2AB90 solid;*/
+	padding-right: 10px;
+	padding-left: 10px;
+	float: left;
 	font-size: 25px;
+}
+
+.assessmentDateInner
+{
+	position: relative;
+	top: -5px;
 }
 
 .assessmentRemove
 {
 	height: 25px;
 	padding: 2.5px;
-	border-left: 3px black solid;
+	/*border-left: 1px #B2AB90 solid;*/
+	padding-right: 5px;
+	padding-left: 5px;
 	float: right;
 }
 .assessmentEdit
 {
 	height: 25px;
 	padding: 2.5px;
-	border-left: 3px black solid;
+	/*border-left: 1px #B2AB90 solid;*/
+	padding-right: 5px;
+	padding-left: 5px;
 	float: right;
 }
 
+.assessmentWeightage
+{
+	height: 25px;
+	padding: 2.5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	float:right;
+}
+
+.assessmentWeightageVal
+{
+	padding-left: 2.5px;
+	padding-right: 2.5px;
+	float:right;
+}
+
+.markBars
+{}
+
+#assessmentCreate
+{
+	width: 100%;
+	height: 25px;
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	text-align: center;
+	background-color: #FF8011;
+}
+
+#overlay
+{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background-color: rgba(0, 0, 0, .5);
+}
+
+#editAssessmentPanel
+{
+	width: 400px;
+	height: 300px;
+	background-color: #FFFFFF;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: calc(50% - 150px);
+	text-align: center;
+}
+#editAssessmentNameField
+{
+	border: 0;
+	text-align: center;
+	width: 100%;
+	font-size: 20px;
+	margin-top: 20px;
+}
+#editAssessmentDateField
+{
+	border: 0;
+	text-align: center;
+	font-size: 17px;
+}
+#editCategories
+{
+	margin-top: 15px;
+	text-align: center;
+}
+#editKnowledge
+{
+	background-color: #6BB145;
+	width: 100px;
+	height: 215px;
+	float: left;
+	font-size: 13px;
+}
+#editKnowledgeTitle
+{
+	background-color: #6BB145;
+	border-bottom: 1px solid black;
+}
+#editKnowledgePanel
+{
+	text-align: center;
+}
+#editThinking
+{
+	background-color: #F0B21A;
+	width: 100px;
+	height: 215px;
+	float: left;
+	font-size: 13px;
+}
+#editThinkingTitle
+{
+	background-color: #F0B21A;
+	border-bottom: 1px solid black;
+}
+#editCommunication
+{
+	background-color: #3FA3BB;
+	width: 100px;
+	height: 215px;
+	float: left;
+	font-size: 13px;
+}
+#editCommunicationTitle
+{
+	background-color: #3FA3BB;
+	border-bottom: 1px solid black;
+}
+#editApplication
+{
+	background-color: #D14628;
+	width: 100px;
+	height: 215px;
+	float: left;
+	font-size: 13px;
+}
+#editApplicationTitle
+{
+	background-color: #D14628;
+	border-bottom: 1px solid black;
+}
+
+#createClassPanel
+{
+	width: 400px;
+	height: 300px;
+	position: relative;
+	top: calc(50% - 150px);
+	background-color: white;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#createClassNameField
+{
+	width: calc(100%);
+	border: 0;
+	outline: none;
+	text-align: center;
+	font-size: 25px;
+	margin-top: 10px;
+}
+
+#createClassBottomDivision
+{
+	width: 100%;
+	margin-top: 10px;
+	height: calc(100% - 81px);
+}
+
+#createClassCategoryWeights
+{
+	width: 100px;
+	height: calc(100% - 41px);
+	background-color: #DDDDDD;
+	padding-top: 15px;
+	float:left;
+}
+#createClassCategoryWeightsTitle
+{
+	margin-bottom: 10px;
+}
+#createClassCategoryWeightsContainer
+{
+	width: 100%;
+	height: calc(100% - 28px);
+	background-color: #BBBBBB;
+}
+#createClassKnowledge
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #6BB145;
+}
+#createClassThinking
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #F0B21A;
+}
+#createClassCommunication
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #3FA3BB;
+}
+#createClassApplication
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #D14628;
+}
+#createClassAssessmentWeightTypesList
+{
+	width: calc(100% - 101px);
+	height:100%;
+	float:right;
+	background-color: #DDDDDD;
+	border-left: 1px black solid;
+}
+#createClassAssessmentWeightTypesListTitle
+{
+	width: 100%;
+	margin-top: 15px;
+	text-align: center;
+}
+#ccawtNameTitle
+{
+	float: left;
+	margin-top: 5px;
+	margin-left: 5px;
+}
+#ccawtWeightTitle
+{
+	float: right;
+	margin-top: 5px;
+	margin-right: 15px;
+}
+#ccawtCategoriesTitle
+{
+	float: right;
+	margin-top: 5px;
+	margin-right: 45px;
+}
+#createClassAssessmentWeightTypesListScrolling
+{
+	width: 100%;
+	height: calc(100% - 56px);
+	margin-top: 10px;
+	overflow-y: scroll;
+	clear: both;
+}
+#ccawt
+{
+	width: 100%;
+	height: 20px;
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	background-color: #BBBBBB;
+}
+.ccawtName
+{
+	width: calc(100% - 154px);
+	padding: 0;
+	border: 0;
+	border-bottom: 1px solid black;
+	background-color: #BBBBBB;
+	outline: none;
+	margin: 0;
+	float: left;
+	margin-right: 3px;
+	margin-left: 3px;
+}
+.ccawtWeight
+{
+	width: 40px;
+	padding: 0;
+	border: 0;
+	border-bottom: 1px solid black;
+	background-color: #BBBBBB;
+	outline: none;
+	margin: 0;
+	float: left;
+	margin-right: 3px;
+}
+.ccawtKCont
+{
+	background-color: #6BB145;
+	float: left;
+}
+.ccawtTCont
+{
+	background-color: #F0B21A;
+	float: left;
+}
+.ccawtCCont
+{
+	background-color: #3FA3BB;
+	float: left;
+}
+.ccawtACont
+{
+	background-color: #D14628;
+	float: left;
+}
+.ccawtRemove
+{
+	float: left;
+	margin-left: 3px;
+}
+#createCCAWT
+{
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	background-color: #CCCCCC;
+	width: 100%;
+	height: 20px;
+}
+#createClassButtonContainer
+{
+	width: 100%;
+	height: 25.5px;
+	padding-top: 4.5px;
+}
 
 ::-webkit-scrollbar
 {

@@ -1,4 +1,4 @@
-<template name="mainView">
+<template name='mainView'>
 	<div id='content'>
 		<div id='header'>
 			<div id='login'>
@@ -9,13 +9,192 @@
 			{{#each classList}}
 				{{> classElement}}
 			{{/each}}
+			<div id="classCreate">
+				<svg width='25' height='25' viewBox='0 0 1 1'>
+					<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
+					<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+				</svg>
+			</div>
 		</div>
-		{{> mainContent}}
+		{{#if checkIfViewingClass}}
+			{{> mainContent}}
+		{{else}}
+			<div id='noClassViewed'>
+				<div id='noClassViewedText'>
+					Click on a class to get started, or create a new one using the "+" on the left!
+				</div>
+			</div>
+		{{/if}}
+	</div>
+	<div id='overlay' style='display: {{overlayVisibility}}'>
+		<div id='editAssessmentPanel' style='display: {{editingAssessmentVisibility}}'>
+			<input id='editAssessmentNameField' type='text' value="{{editingAssessmentName}}"/><br>
+			<input id='editAssessmentDateField' type='date' value="{{editingAssessmentDate}}" />
+			<select id='editAssessmentWeightField' value='{{editingAssessmentWeightType}}'>
+				{{#each editingAssessmentWeightTypeOptions}}
+					{{> editAssessmentWeightTypeOption}}
+				{{/each}}
+			</select>
+			<div id='editCategories'>
+				<div id='editKnowledge'>
+					<div id='editKnowledgeTitle'>Knowledge</div>
+					<input id='editKnowledgeEnabled' type='checkbox' checked>
+					<div id='editKnowledgePanel'>
+						Percentage:<br>
+						<input type='number' id='editKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
+					</div>
+				</div>
+				<div id='editThinking'>
+					<div id='editThinkingTitle'>Thinking</div>
+					<input id='editThinkingEnabled' type='checkbox' checked>
+					<div id='editThinkingPanel'>
+						Percentage<br>
+						<input type='number' id='editThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
+					</div>
+				</div>
+				<div id='editCommunication'>
+					<div id='editCommunicationTitle'>Communication</div>
+					<input id='editCommunicationEnabled' type='checkbox' checked>
+					<div id='editCommunicationPanel'>
+						Percentage<br>
+						<input type='number' id='editCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
+					</div>
+				</div>
+				<div id='editApplication'>
+					<div id='editApplicationTitle'>Application</div>
+					<input id='editApplicationEnabled' type='checkbox' checked>
+					<div id='editApplicationPanel'>
+						Percentage<br>
+						<input type='number' id='editApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='createClassPanel' style='display: {{createClassVisibility}}'>
+			<input id='createClassNameField' type='text'/><br>
+			<div id='createClassBottomDivision'>
+				<div id='createClassCategoryWeights'>
+					<div id='createClassCategoryWeightsTitle'>
+						Category Percentages
+					</div>
+					<div id='createClassCategoryWeightsContainer'>
+						<div id='createClassKnowledge'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								K:
+								<input id='createClassKnowledgeInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='createClassThinking'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								T:
+								<input id='createClassThinkingInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='createClassCommunication'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								C:
+								<input id='createClassCommunicationInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='createClassApplication'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								A:
+								<input id='createClassApplicationInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id='createClassAssessmentWeightTypesList'>
+					<div id='createClassAssessmentWeightTypesListTitle'>
+						Assessment Weight Types
+					</div>
+					<div>
+						<div id='ccawtNameTitle'>
+							Name
+						</div>
+						<div id='ccawtCategoriesTitle'>
+							K T C A
+						</div>
+						<div id='ccawtWeightTitle'>
+							Weight
+						</div>
+					</div>
+					<div  id='createClassAssessmentWeightTypesListScrolling'>
+						{{#each ccawt}}
+							{{> ccawtTemplate}}
+						{{/each}}
+						<div id='createCCAWT'>
+							<svg width='20' height='20' viewBox='0 0 1 1'>
+								<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
+								<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id='createClassButtonContainer'>
+				<input id='createClassButton' type='button' value='Finish'/>
+			</div>
+		</div>
 	</div>
 </template>
+
+<template name='ccawtTemplate'>
+	<div id='ccawt'>
+		<input class='ccawtName' type='text' value='{{ccawtName}}'/>
+		<input class='ccawtWeight' type='number' value='{{ccawtWeight}}'/>
+		<div class='ccawtKCont'>
+			<input class='ccawtK' type='checkBox' {{ccawtKHelper}}/>
+		</div>
+		<div class='ccawtTCont'>
+			<input class='ccawtT' type='checkBox' {{ccawtTHelper}}/>
+		</div>
+		<div class='ccawtCCont'>
+			<input class='ccawtC' type='checkBox' {{ccawtCHelper}}/>
+		</div>
+		<div class='ccawtACont'>
+			<input class='ccawtA' type='checkBox' {{ccawtAHelper}}/>
+		</div>
+		<svg class='ccawtRemove' width='20' height='20' viewBox='0 0 1 1'>
+			<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+			<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+		</svg>
+	</div>
+</template>
+
+<template name='editAssessmentWeightTypeOption'>
+	<option value='{{s1}}'>{{s2}}</option>
+</template>
+
+<template name='splashPage'>
+	<div id='content'>
+		<div id='header'>
+			<div id='login'>
+				{{> loginButtons}}
+			</div>
+		</div>
+		<div id='splashTop'>
+			<div id='title'>Markr</div>
+			<div id='subtitle'>The mark tracking application for students</div>
+			<div id='categoriesContainer'>
+				<canvas width='200' height='200' id='p1'></canvas>
+				<canvas width='200' height='200' id='p2'></canvas>
+				<canvas width='200' height='200' id='p3'></canvas>
+				<canvas width='200' height='200' id='p4'></canvas>
+			</div>
+			<div id='bigLogin'><span>Start Tracking Now!</span></div>
+		</div>
+		<div id='splashBottom'>
+			<div id='text1'>
+				Markr allows students to track their marks alongside their teachers to better understand the process and how to improve in the future. Markr allows students to record their marks online and access them on the go, particularly in school.
+			</div>
+		</div>
+	</div>
+</template>
+
 <template name="classElement">
 	<div class="class">
-		<div class='classListName'>{{ className }}</div>
+		<div class='classListName'>{{ title }}</div>
 		<div class='classRemove'>
 			<svg width='25' height='25' viewBox='0 0 1 1'>
 				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
@@ -24,18 +203,12 @@
 		</div>
 	</div>
 </template>
+
 <template name="mainContent">
 	<div id='main'>
 		<div id='top'>
-			<h2 id='className'>
-				Introduction to Computer Science
-			</h2>
-			<h3 id='classCourseCode'>
-				ICS 4U1 - 01
-			</h3>
+			<input id='className' value='{{className}}'/><br>
 			<canvas id='percentage' width='400' height='400'></canvas>
-			<div id='percentageVal'>
-				93</div>
 		</div>
 		<div id='bottom'>
 			<div id='assessmentsTitle'>
@@ -44,29 +217,65 @@
 			{{#each assessmentList}}
 				{{> assessment}}
 			{{/each}}
+			<div id='assessmentCreate'>
+				<svg width='25' height='25' viewBox='0 0 1 1'>
+					<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
+					<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+				</svg>
+			</div>
 		</div>
 	</div>
 </template>
+
 <template name="assessment">
 	<div class='assessment'>
 		<div class='assessmentName'>
-			{{assessmentName}}
+			{{title}}
 		</div>
 		<div class='assessmentRemove'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
+			<svg class='assessmentRemoveSymbol' width='25' height='25' viewBox='0 0 1 1'>
 				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
 				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 			</svg>
 		</div>
 		<div class='assessmentEdit'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
+			<svg class='assessmentEditSymbol' width='25' height='25' viewBox='0 0 1 1'>
 				<polygon points='1,0 .67,.1 .89,.31'/>
 				<polygon points='.87,.37 .63,.13 .13,.63 .37,.87'/>
 				<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05'/>
 			</svg>
 		</div>
+		<div class='assessmentWeightage'>
+			<svg class='assessmentWeightSymbol' width='25' height='25' viewBox='0 0 1 1'>
+				<polygon points='0,.9125 1,.9125 .7781,.2625 .22119,.2625'/>
+				<path d='M 0.425 0.2625 L 0.425 0.1625 A .075 .075 -3.14 1 1 .575 .162 L .575 .2625' stroke='black' stroke-width=".1" fill-opacity="0"/>
+			</svg>
+			<div class='assessmentWeightageVal'>
+				{{assessmentWeight}}
+			</div>
+		</div>
+		<div class='markBars'>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
+				<div class='barFG' style='/*width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}} * {{assessmentApplicationPercent}}); */width: calc(100% * {{assessmentCommunicationPercent}}); border-color: #D14628;'>
+				</div>
+			</div>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>
+				<div class='barFG' style='width: calc(100% * {{assessmentCommunicationPercent}}); border-color: #3FA3BB;'>
+				</div>
+			</div>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #CCA241;'>
+				<div class='barFG' style='width: calc(100% * {{assessmentThinkingPercent}}); border-color: #F0B21A;'>
+				</div>
+			</div>
+			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #5C8743;'>
+				<div class='barFG' style='width: calc(100% * {{assessmentKnowledgePercent}}); border-color: #6BB145;'>
+				</div>
+			</div>
+		</div>
 		<div class='assessmentDate'>
-			{{assessmentDate}}
+			<div class='assessmentDateInner'>
+				{{assessmentDate}}
+			</div>
 		</div>
 	</div>
 </template>
