@@ -135,6 +135,8 @@
 			<div id='createClassButtonContainer'>
 				<input id='createClassButton' type='button' value='Finish'/>
 			</div>
+			<div id='createClassError'>
+			</div>
 		</div>
 	</div>
 </template>
@@ -196,9 +198,9 @@
 	<div class="class">
 		<div class='classListName'>{{ title }}</div>
 		<div class='classRemove'>
-			<svg width='25' height='25' viewBox='0 0 1 1'>
-				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
-				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			<svg class='classRemoveSVG' width='25' height='25' viewBox='0 0 1 1'>
+				<line class='classRemoveSVG' x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line class='classRemoveSVG' x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 			</svg>
 		</div>
 	</div>

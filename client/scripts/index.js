@@ -13,7 +13,12 @@ if (Meteor.isClient)
 	};
 
 	Template.mainView.helpers({
-		overlayVisibility: function()
+
+		classList: function()
+		{
+			return Classes.find().fetch();
+		}
+		, overlayVisibility: function()
 		{
 			if(Session.get('showEditAssessmentPanel') || Session.get('showCreateClassPanel'))
 			{
@@ -81,14 +86,6 @@ if (Meteor.isClient)
 			
 		}
 
-		, 'click .class' : function(event)
-		{
-			if($(event.target).attr("class") != "classRemove")
-			{
-				// TODO Route the user to the class
-			}
-		}
-
 		, 'click #classCreate' : function(event)
 		{
 			Session.set('showCreateClassPanel', true);
@@ -109,7 +106,106 @@ if (Meteor.isClient)
 
 		, 'click #createClassButton' : function(event)
 		{
-			
+			var x = Session.get('ccawt')
+			if(x == undefined || x == null || x.length <= 0)
+			{
+				$('#createClassError')[0].innerHTML = "No assessments types defined!";
+				return;
+			}
+			var k = Number($('#createClassKnowledgeInput')[0].value);
+			var t = Number($('#createClassThinkingInput')[0].value);
+			var c = Number($('#createClassCommunicationInput')[0].value);
+			var a = Number($('#createClassApplicationInput')[0].value);
+			if(k < 0 || t < 0 || c < 0 || a < 0)
+			{
+				$('#createClassError')[0].innerHTML = "Some category percentages are negative!";
+				return;
+			}
+			if(k + t + c + a != 100)
+			{
+				$('#createClassError')[0].innerHTML = "Category percentages do not add up to 100%!";
+				return;
+			}
+			var n = $('#createClassNameField')[0].value;
+			if(n == "")
+			{
+				$('#createClassError')[0].innerHTML = "Class name is blank!";
+				return;
+			}
+			var at = [];
+			for(var i = 0; i < x.lenght; i++)
+			{
+				var xn = x.ccawtName;
+				if(xn == "")
+				{
+					$('#createClassError')[0].innerHTML = "Assessment type name is blank! How did you manage that...?";
+					return;
+				}
+				var xw = x.ccawtWeight;
+				if(xw == "")
+				{
+					$('#createClassError')[0].innerHTML = "Assessment weight is blank! How did you manage that...?";
+					return;
+				}
+				if(xw == 0)
+				{
+					$('#createClassError')[0].innerHTML = "Assessment weight is zero! How did you manage that...?";
+					return;
+				}
+				at[i] = { typeName: xn, weight: xw, categories: x.categories };
+			}
+			Meteor.call('createClass', {title: n, categoryWeightings: [k, t, a, c], assessmentTypes: at}, function(error, result){
+				if(error)
+				{
+					$('#createClassError')[0].innerHTML = "" + error;
+					return;
+				}
+				else
+				{
+					Session.set('showCreateClassPanel', false);
+					Router.go("classPage", {"classId": result});
+					return;
+				}
+			});
+		}
+	});
+
+	Template.classElement.events({
+		'click .class' : function(event)
+		{
+			if($(event.target).attr("class") != "classRemoveSVG")
+			{
+				// TODO Route the user to the class
+				Router.go("classPage", {"classId": this._id});
+			}
+		}
+		, 'click .classRemoveSVG' : function(event, template)
+		{
+			if(Router.current().data().classes._id == this._id)
+			{
+				Meteor.call("deleteClass", {classId: this._id}, function(error)
+				{
+					if(error)
+					{
+						console.log(error);
+					}
+					else
+					{
+						Router.go("splashPage");
+					}
+				});
+			}
+			else
+			{
+				Meteor.call("deleteClass", {classId: this._id}, function(error)
+				{
+					if(error)
+					{
+						console.log(error);
+					}
+				});
+			}
+			//Router.go("classPage", {"classId": this._id});
 		}
 	});
 
@@ -135,6 +231,10 @@ if (Meteor.isClient)
 	Template.ccawtTemplate.events({
 		'change .ccawtName': function(event)
 		{
+			if($(event.target)[0].value == "")
+			{
+				$(event.target)[0].value = this.ccawtName;
+			}
 			var n = Session.get('ccawt');
 			for(var i = 0; i < n.length; i++)
 			{
@@ -148,6 +248,16 @@ if (Meteor.isClient)
 		}
 		, 'change .ccawtWeight': function(event)
 		{
+			var val = Number($(event.target)[0].value);
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target)[0].value = val;
 			var n = Session.get('ccawt');
 			for(var i = 0; i < n.length; i++)
 			{
@@ -181,11 +291,19 @@ if (Meteor.isClient)
 				{
 					if($(event.target)[0].checked)
 					{
-						n[i].categories.push("knowledge");
+						var x = n[i].categories.indexOf("knowledge");
+						if(x == -1)
+						{
+							n[i].categories.push("knowledge");
+						}
 					}
 					else
 					{
-						n[i].categories.splice(n[i].categories.indexOf("knowledge"), 1);
+						var x = n[i].categories.indexOf("knowledge");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
 					}
 					break;
 				}
@@ -201,11 +319,19 @@ if (Meteor.isClient)
 				{
 					if($(event.target)[0].checked)
 					{
-						n[i].categories.push("thinking");
+						var x = n[i].categories.indexOf("thinking");
+						if(x == -1)
+						{
+							n[i].categories.push("thinking");
+						}
 					}
 					else
 					{
-						n[i].categories.splice(n[i].categories.indexOf("thinking"), 1);
+						var x = n[i].categories.indexOf("thinking");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
 					}
 					break;
 				}
@@ -221,11 +347,19 @@ if (Meteor.isClient)
 				{
 					if($(event.target)[0].checked)
 					{
-						n[i].categories.push("application");
+						var x = n[i].categories.indexOf("application");
+						if(x == -1)
+						{
+							n[i].categories.push("application");
+						}
 					}
 					else
 					{
-						n[i].categories.splice(n[i].categories.indexOf("application"), 1);
+						var x = n[i].categories.indexOf("application");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
 					}
 					break;
 				}
@@ -241,11 +375,19 @@ if (Meteor.isClient)
 				{
 					if($(event.target)[0].checked)
 					{
-						n[i].categories.push("communication");
+						var x = n[i].categories.indexOf("communication");
+						if(x == -1)
+						{
+							n[i].categories.push("communication");
+						}
 					}
 					else
 					{
-						n[i].categories.splice(n[i].categories.indexOf("communication"), 1);
+						var x = n[i].categories.indexOf("communication");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
 					}
 					break;
 				}
@@ -265,20 +407,23 @@ if (Meteor.isClient)
 	Template.mainContent.helpers({
 		assessmentList: function()
 		{
-			var x = Assessments.find({"parentClassId": this.class._id}).fetch();
-			console.log(x);
+			var x = Assessments.find({"parentClassId": this.classes._id}).fetch();
 			return x;
 		}
-		, classList: function()
+		, className: function()
 		{
-			return Classes.find().fetch();
+			return Classes.findOne({_id:this.classes._id}).title;
 		}
 	});
 
 	Template.mainContent.events({
 		'change #className': function(event)
 		{
-			Meteor.call("changeClassTitle", {classId: this.class._id, newTitle: $(event.target)[0].value});
+			Meteor.call("changeClassTitle", {classId: this.classes._id, newTitle: $(event.target)[0].value});
+		}
+		, 'click #assessmentCreate': function(event)
+		{
+			//Meteor.call("createAssessment", {title: "AssessmentSmith", parentClassId: this.classes._id, type: })
 		}
 	});
 
@@ -296,7 +441,6 @@ if (Meteor.isClient)
 
 		, assessmentKnowledgePercent: function()
 		{
-			console.log(this);
 			return 1;//this.categoryPercentages[0];
 		}
 
@@ -319,7 +463,6 @@ if (Meteor.isClient)
 	Template.assessment.events({
 		'click .assessmentEditSymbol' : function(event)
 		{
-			console.log(this);
 			//Session.set('editingAssessmentId', )
 			Session.set('showEditAssessmentPanel', true);
 		}
