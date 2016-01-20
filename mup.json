@@ -34,7 +34,8 @@
   // Configure environment
   "env": {
     "PORT": 80,
-    "ROOT_URL": "http://ec2-52-27-174-157.us-west-2.compute.amazonaws.com",
+    "ROOT_URL": "http://marktrackr.xyz",
+    // "ROOT_URL": "http://ec2-52-27-174-157.us-west-2.compute.amazonaws.com",
     "MONGO_URL": "mongodb://shivanshdhar:77*Q3k*f881R@ds039165.mongolab.com:39165/markrproduction"
     // "MAIL_URL": "",
     // "MAIL_API_KEY": "",
