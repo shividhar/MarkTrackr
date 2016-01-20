@@ -422,6 +422,7 @@ if (Meteor.isClient)
 		}
 		, 'click .classRemoveSVG' : function(event, template)
 		{
+			if(confirm("Are you sure you want to delete this class?"))
 			if(Router.current().data().classes._id == this._id)
 			{
 				Meteor.call("deleteClass", {classId: this._id}, function(error)
@@ -641,8 +642,6 @@ if (Meteor.isClient)
 	{
 		var percentageCanvas = $('#percentage');
 		generatePercentageCircle(percentageCanvas[0], 190, 130, .93, 'rgb(154,205,50)', 'rgb(119,157,38)', 5, '#FAF0CA');
-
-		Session.set('classToSet', $('.class')[0]);
 	};
 
 	Template.mainContent.helpers({
@@ -658,6 +657,128 @@ if (Meteor.isClient)
 	});
 
 	Template.mainContent.events({
+		"click #assessmentsTitle": function(event){
+			var currentClassId = this.classes._id;
+
+			// Segregating Assessment types with their respective categories
+				var knowledgeAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
+					return (assessmentTypeObject.categories.indexOf("knowledge") != -1)
+				})
+				var knowledgeAssessmentWeights = [];
+				var knowledgeAssessmentPercentages = [];
+
+				_.each(knowledgeAssessments, function(assessmentTypeObject){
+					var knowledgeIndex = assessmentTypeObject.categories.indexOf("knowledge");
+
+					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+
+					_.each(assessments, function(assessmentObject){
+						knowledgeAssessmentWeights.push(assessmentTypeObject.weight);
+						knowledgeAssessmentPercentages.push(assessmentObject.categoryPercentages[knowledgeIndex]);
+					})
+				})
+				//###########
+				var thinkingAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
+					return (assessmentTypeObject.categories.indexOf("thinking") != -1)
+				})
+				var thinkingAssessmentWeights = [];
+				var thinkingAssessmentPercentages = [];
+
+				_.each(thinkingAssessments, function(assessmentTypeObject){
+					var thinkingIndex = assessmentTypeObject.categories.indexOf("thinking");
+
+					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+					
+					_.each(assessments, function(assessmentObject){
+						thinkingAssessmentWeights.push(assessmentTypeObject.weight);
+						thinkingAssessmentPercentages.push(assessmentObject.categoryPercentages[thinkingIndex]);
+					})
+				})
+				//###########
+				var communicationAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
+					return (assessmentTypeObject.categories.indexOf("communication") != -1)
+				})
+				var communicationAssessmentWeights = [];
+				var communicationAssessmentPercentages = [];
+
+				_.each(communicationAssessments, function(assessmentTypeObject){
+					var communicationIndex = assessmentTypeObject.categories.indexOf("communication");
+
+					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+					
+					_.each(assessments, function(assessmentObject){
+						communicationAssessmentWeights.push(assessmentTypeObject.weight);
+						communicationAssessmentPercentages.push(assessmentObject.categoryPercentages[communicationIndex]);
+					})
+				})
+				//###########
+				var applicationAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
+					return (assessmentTypeObject.categories.indexOf("application") != -1)
+				})
+				var applicationAssessmentWeights = [];
+				var applicationAssessmentPercentages = [];
+
+				_.each(applicationAssessments, function(assessmentTypeObject){
+					var applicationIndex = assessmentTypeObject.categories.indexOf("application");
+
+					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+					
+					_.each(assessments, function(assessmentObject){
+						applicationAssessmentWeights.push(assessmentTypeObject.weight);
+						applicationAssessmentPercentages.push(assessmentObject.categoryPercentages[applicationIndex]);
+					})
+				})
+
+			// Calculating total weights for each category
+
+				var totalKnowledgeWeight = 0,
+					totalThinkingWeight = 0,
+					totalCommunicationWeight = 0,
+					totalApplicationWeight = 0;
+				for(var x = 0; x < knowledgeAssessmentWeights.length; x++){
+					totalKnowledgeWeight += knowledgeAssessmentWeights[x];
+				}
+
+				for(var x = 0; x < thinkingAssessmentWeights.length; x++){
+					totalThinkingWeight += thinkingAssessmentWeights[x];
+				}
+
+				for(var x = 0; x < communicationAssessmentWeights.length; x++){
+					totalCommunicationWeight += communicationAssessmentWeights[x];
+				}
+
+				for(var x = 0; x < applicationAssessmentWeights.length; x++){
+					totalApplicationWeight += applicationAssessmentWeights[x];
+				}
+
+			// Calculating weighted averages for every category
+				var weightedKnowledgeAverage = 0,
+					weightedThinkingAverage = 0,
+					weightedCommunicationAverage = 0,
+					weightedApplicationAverage = 0;
+
+				for(var x = 0; x < knowledgeAssessmentPercentages.length; x++){
+					weightedKnowledgeAverage += knowledgeAssessmentPercentages[x] * (knowledgeAssessmentWeights[x] / totalKnowledgeWeight);
+				}
+
+				for(var x = 0; x < thinkingAssessmentPercentages.length; x++){
+					weightedThinkingAverage += thinkingAssessmentPercentages[x] * (thinkingAssessmentWeights[x] / totalThinkingWeight);
+				}
+
+				for(var x = 0; x < communicationAssessmentPercentages.length; x++){
+					weightedCommunicationAverage += communicationAssessmentPercentages[x] * (communicationAssessmentWeights[x] / totalCommunicationWeight);
+				}
+
+				for(var x = 0; x < applicationAssessmentPercentages.length; x++){
+					weightedApplicationAverage += applicationAssessmentPercentages[x] * (applicationAssessmentWeights[x] / totalApplicationWeight);
+				}
+				
+			// Calculating total average	
+
+			var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
+
+			return false
+		},
 		'change #className': function(event)
 		{
 			Meteor.call("changeClassTitle", {classId: this.classes._id, newTitle: $(event.target).val()});
