@@ -60,7 +60,14 @@ if (Meteor.isClient)
 
 		, editingAssessmentWeightTypeOptions: function()
 		{
-			return Classes.findOne({_id: this.classes._id}).assessmentTypes;
+			if(this.classes)
+			{
+				return Classes.findOne({_id: this.classes._id}).assessmentTypes;
+			}
+			else
+			{
+				return [];
+			}
 		}
 	});
 
@@ -85,11 +92,11 @@ if (Meteor.isClient)
 		{
 			Session.set('showCreateClassPanel', true);
 			Session.set('ccawt', []);
-			$('#createClassNameField')[0].value = '[Class Name Here]';
-			$('#createClassKnowledgeInput')[0].value = '25';
-			$('#createClassThinkingInput')[0].value = '25';
-			$('#createClassCommunicationInput')[0].value = '25';
-			$('#createClassApplicationInput')[0].value = '25';
+			$('#createClassNameField').val('[Class Name Here]');
+			$('#createClassKnowledgeInput').val('25');
+			$('#createClassThinkingInput').val('25');
+			$('#createClassCommunicationInput').val('25');
+			$('#createClassApplicationInput').val('25');
 		}
 
 		, 'click #createCCAWT' : function(event)
@@ -101,58 +108,61 @@ if (Meteor.isClient)
 
 		, 'click #createClassButton' : function(event)
 		{
-			var x = Session.get('ccawt')
+			var x = Session.get('ccawt');
 			if(x == undefined || x == null || x.length <= 0)
 			{
-				$('#createClassError')[0].innerHTML = "No assessments types defined!";
+				$('#createClassError').html("No assessments types defined!");
 				return;
 			}
-			var k = Number($('#createClassKnowledgeInput')[0].value);
-			var t = Number($('#createClassThinkingInput')[0].value);
-			var c = Number($('#createClassCommunicationInput')[0].value);
-			var a = Number($('#createClassApplicationInput')[0].value);
+			var k = Number($('#createClassKnowledgeInput').val());
+			var t = Number($('#createClassThinkingInput').val());
+			var c = Number($('#createClassCommunicationInput').val());
+			var a = Number($('#createClassApplicationInput').val());
 			if(k < 0 || t < 0 || c < 0 || a < 0)
 			{
-				$('#createClassError')[0].innerHTML = "Some category percentages are negative!";
+				$('#createClassError').html("Some category percentages are negative!");
 				return;
 			}
 			if(k + t + c + a != 100)
 			{
-				$('#createClassError')[0].innerHTML = "Category percentages do not add up to 100%!";
+				$('#createClassError').html("Category percentages do not add up to 100%!");
 				return;
 			}
-			var n = $('#createClassNameField')[0].value;
+			var n = $('#createClassNameField').val();
 			if(n == "")
 			{
-				$('#createClassError')[0].innerHTML = "Class name is blank!";
+				$('#createClassError').html("Class name is blank!");
 				return;
 			}
+			console.log(x);
 			var at = [];
-			for(var i = 0; i < x.lenght; i++)
+			for(var i = 0; i < x.length; i++)
 			{
-				var xn = x.ccawtName;
+				var xn = x[i].ccawtName;
+				console.log(xn);
 				if(xn == "")
 				{
-					$('#createClassError')[0].innerHTML = "Assessment type name is blank! How did you manage that...?";
+					$('#createClassError').html("Assessment type name is blank! How did you manage that...?");
 					return;
 				}
-				var xw = x.ccawtWeight;
+				var xw = x[i].ccawtWeight;
 				if(xw == "")
 				{
-					$('#createClassError')[0].innerHTML = "Assessment weight is blank! How did you manage that...?";
+					$('#createClassError').html("Assessment weight is blank! How did you manage that...?");
 					return;
 				}
 				if(xw == 0)
 				{
-					$('#createClassError')[0].innerHTML = "Assessment weight is zero! How did you manage that...?";
+					$('#createClassError').html("Assessment weight is zero! How did you manage that...?");
 					return;
 				}
-				at[i] = { typeName: xn, weight: xw, categories: x.categories };
+				at[i] = { typeName: xn, weight: xw, categories: x[i].categories };
 			}
+			console.log(at);
 			Meteor.call('createClass', {title: n, categoryWeightings: [k, t, a, c], assessmentTypes: at}, function(error, result){
 				if(error)
 				{
-					$('#createClassError')[0].innerHTML = "" + error;
+					$('#createClassError').html("" + error);
 					return;
 				}
 				else
@@ -160,6 +170,134 @@ if (Meteor.isClient)
 					Session.set('showCreateClassPanel', false);
 					Router.go("classPage", {"classId": result});
 					return;
+				}
+			});
+		}
+		, 'change #createKnowledgePercent' : function(event)
+		{
+			var val = Number($(event.target).val());
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target).val(val);
+		}
+		, 'change #createThinkingPercent' : function(event)
+		{
+			var val = Number($(event.target).val());
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target).val(val);
+		}
+		, 'change #createCommunicationPercent' : function(event)
+		{
+			var val = Number($(event.target).val());
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target).val(val);
+		}
+		, 'change #createApplicationPercent' : function(event)
+		{
+			var val = Number($(event.target).val());
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target).val(val);
+		}
+		, 'change #createAssessmentWeightField': function(event)
+		{
+			var assessmentTypes = Classes.findOne({_id: this.classes._id}).assessmentTypes;
+			for(var i = 0; i < assessmentTypes.length; i++)
+			{
+				if(assessmentTypes[i].typeName == $(event.target).val())
+				{
+					$('#createKnowledge').css('background-color', (assessmentTypes[i].categories.indexOf('knowledge') != -1 ? '#6BB145': '#9CAF92'));
+					$('#createThinking').css('background-color', (assessmentTypes[i].categories.indexOf('thinking') != -1 ? '#F0B21A': '#EFD594'));
+					$('#createCommunication').css('background-color', (assessmentTypes[i].categories.indexOf('communication') != -1 ? '#3FA3BB': '#87B0BA'));
+					$('#createApplication').css('background-color', (assessmentTypes[i].categories.indexOf('application') != -1 ? '#D14628': '#D19183'));
+					
+					$('#createKnowledgePercent').prop('disabled', assessmentTypes[i].categories.indexOf('knowledge') == -1);
+					$('#createThinkingPercent').prop('disabled', assessmentTypes[i].categories.indexOf('thinking') == -1);
+					$('#createCommunicationPercent').prop('disabled', assessmentTypes[i].categories.indexOf('communication') == -1);
+					$('#createApplicationPercent').prop('disabled', assessmentTypes[i].categories.indexOf('application') == -1);
+					break;
+				}
+			}
+		}
+		
+		, 'click #createAssessmentButton': function(event)
+		{
+			var n = $('#createAssessmentNameField').val();
+			if(n == "")
+			{
+				$('createAssessmentError').html('Assessment name is blank! How did you manage that...?');
+				return;
+			}
+			var at = undefined;
+			var assessmentTypes = Classes.findOne({_id: this.classes._id}).assessmentTypes;
+			for(var i = 0; i < assessmentTypes.length; i++)
+			{
+				if(assessmentTypes[i].typeName == $('#createAssessmentWeightField').val())
+				{
+					at = assessmentTypes[i];
+					break;
+				}
+			}
+			if(at == undefined)
+			{
+				$('createAssessmentError').html('Invalid assessment type! How did you manage that...?');
+				return;
+			}
+			var cats = [];
+			for(var i = 0; i < at.categories.length; i++)
+			{
+				if(at.categories[i] == "knowledge")
+				{
+					cats.push($('#createKnowledgePercent').val());
+				}
+				if(at.categories[i] == "thinking")
+				{
+					cats.push($('#createThinkingPercent').val());
+				}
+				if(at.categories[i] == "communication")
+				{
+					cats.push($('#createCommunicationPercent').val());
+				}
+				if(at.categories[i] == "application")
+				{
+					cats.push($('#createApplicationPercent').val());
+				}
+			}
+			Meteor.call("createAssessment", {title: n, parentClassId: this.classes._id, type: at.typeName, weight: at.weight, categories: at.categories, categoryPercentages: cats}, function(error){
+				if(error)
+				{
+					$('#createAssessmentError').html("" + error);
+					return;
+				}
+				else
+				{
+					Session.set('showCreateAssessmentPanel', false);
 				}
 			});
 		}
@@ -226,16 +364,16 @@ if (Meteor.isClient)
 	Template.ccawtTemplate.events({
 		'change .ccawtName': function(event)
 		{
-			if($(event.target)[0].value == "")
+			if($(event.target).val() == "")
 			{
-				$(event.target)[0].value = this.ccawtName;
+				$(event.target).val(this.ccawtName);
 			}
 			var n = Session.get('ccawt');
 			for(var i = 0; i < n.length; i++)
 			{
 				if(n[i].rID == this.rID)
 				{
-					n[i].ccawtName = $(event.target)[0].value;
+					n[i].ccawtName = $(event.target).val();
 					break;
 				}
 			}
@@ -243,7 +381,7 @@ if (Meteor.isClient)
 		}
 		, 'change .ccawtWeight': function(event)
 		{
-			var val = Number($(event.target)[0].value);
+			var val = Number($(event.target).val());
 			if(val < 0)
 			{
 				val = Math.abs(val);
@@ -252,13 +390,13 @@ if (Meteor.isClient)
 			{
 				val = 1;
 			}
-			$(event.target)[0].value = val;
+			$(event.target).val(val);
 			var n = Session.get('ccawt');
 			for(var i = 0; i < n.length; i++)
 			{
 				if(n[i].rID == this.rID)
 				{
-					n[i].ccawtWeight = $(event.target)[0].value;
+					n[i].ccawtWeight = $(event.target).val();
 					break;
 				}
 			}
@@ -414,10 +552,28 @@ if (Meteor.isClient)
 	Template.mainContent.events({
 		'change #className': function(event)
 		{
-			Meteor.call("changeClassTitle", {classId: this.classes._id, newTitle: $(event.target)[0].value});
+			Meteor.call("changeClassTitle", {classId: this.classes._id, newTitle: $(event.target).val()});
 		}
 		, 'click #assessmentCreate': function(event)
 		{
+			Session.set("showCreateAssessmentPanel", true);
+			var assessType = Classes.findOne({_id: this.classes._id}).assessmentTypes[0];
+			$('#createAssessmentNameField').val('AssessmentSmith');
+			$('#createAssessmentWeightField').val(assessType.typeName);
+			$('#createKnowledgePercent').val('100');
+			$('#createThinkingPercent').val('100');
+			$('#createCommunicationPercent').val('100');
+			$('#createApplicationPercent').val('100');
+			
+			$('#createKnowledge').css('background-color', (assessType.categories.indexOf('knowledge') != -1 ? '#6BB145': '#9CAF92'));
+			$('#createThinking').css('background-color', (assessType.categories.indexOf('thinking') != -1 ? '#F0B21A': '#EFD594'));
+			$('#createCommunication').css('background-color', (assessType.categories.indexOf('communication') != -1 ? '#3FA3BB': '#87B0BA'));
+			$('#createApplication').css('background-color', (assessType.categories.indexOf('application') != -1 ? '#D14628': '#D19183'));
+			
+			$('#createKnowledgePercent').prop('disabled', assessType.categories.indexOf('knowledge') == -1);
+			$('#createThinkingPercent').prop('disabled', assessType.categories.indexOf('thinking') == -1);
+			$('#createCommunicationPercent').prop('disabled', assessType.categories.indexOf('communication') == -1);
+			$('#createApplicationPercent').prop('disabled', assessType.categories.indexOf('application') == -1);
 			//Meteor.call("createAssessment", {title: "AssessmentSmith", parentClassId: this.classes._id, type: })
 		}
 	});
@@ -431,27 +587,205 @@ if (Meteor.isClient)
 
 		, assessmentCategoryCount: function()
 		{
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				return at[i].categories.length;
+			}
 			return 4;
 		}
 
 		, assessmentKnowledgePercent: function()
 		{
-			return 1;//this.categoryPercentages[0];
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('knowledge');
+				if(j != -1)
+				{
+					return (this.categoryPercentages[j]) / 100;
+				}
+			}
+			return 0;
 		}
 
 		, assessmentThinkingPercent: function()
 		{
-			return 1;//this.categoryPercentages[1];
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('thinking');
+				if(j != -1)
+				{
+					return (this.categoryPercentages[j]) / 100;
+				}
+			}
+			return 0;
 		}
 
 		, assessmentCommunicationPercent: function()
 		{
-			return 1;//this.categoryPercentages[3];
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('communication');
+				if(j != -1)
+				{
+					return (this.categoryPercentages[j]) / 100;
+				}
+			}
+			return 0;
 		}
 
 		, assessmentApplicationPercent: function()
 		{
-			return 1;//this.categoryPercentages[2];
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('application');
+				if(j != -1)
+				{
+					return (this.categoryPercentages[j]) / 100;
+				}
+			}
+			return 0;
+		}
+		
+		, assessmentKDisplay: function()
+		{
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('knowledge');
+				if(j != -1)
+				{
+					return "block";
+				}
+			}
+			return "none";
+		}
+		
+		, assessmentTDisplay: function()
+		{
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('thinking');
+				if(j != -1)
+				{
+					return "block";
+				}
+			}
+			return "none";
+		}
+		
+		, assessmentCDisplay: function()
+		{
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('communication');
+				if(j != -1)
+				{
+					return "block";
+				}
+			}
+			return "none";
+		}
+		
+		, assessmentADisplay: function()
+		{
+			var at = Classes.findOne({_id: this.parentClassId}).assessmentTypes;
+			var i = -1;
+			for(var j = 0; j < at.length; j++)
+			{
+				if(at[j].typeName == this.type)
+				{
+					i = j;
+					break;
+				}
+			}
+			if(i != -1)
+			{
+				var j = at[i].categories.indexOf('application');
+				if(j != -1)
+				{
+					return "block";
+				}
+			}
+			return "none";
 		}
 	});
 
@@ -460,7 +794,7 @@ if (Meteor.isClient)
 		{
 			//Session.set('editingAssessmentId', )
 			Session.set('showEditAssessmentPanel', true);
-			$('#editAssessmentNameField')[0].value = this.title;
+			$('#editAssessmentNameField').val(this.title);
 		}
 
 		, 'click .assessmentRemoveSymbol' : function(event)

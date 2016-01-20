@@ -613,6 +613,92 @@ html, body
 	padding-top: 4.5px;
 }
 
+#createAssessmentPanel
+{
+	width: 400px;
+	height: 300px;
+	background-color: #FFFFFF;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: calc(50% - 150px);
+	text-align: center;
+}
+#createAssessmentNameField
+{
+	border: 0;
+	text-align: center;
+	width: 100%;
+	font-size: 20px;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+#createCategories
+{
+	margin-top: 15px;
+	text-align: center;
+}
+#createKnowledge
+{
+	background-color: #6BB145;
+	width: 100px;
+	height: 185px;
+	float: left;
+	font-size: 13px;
+}
+#createKnowledgeTitle
+{
+	background-color: #6BB145;
+	border-bottom: 1px solid black;
+	margin-bottom: 15px;
+}
+#createThinking
+{
+	background-color: #F0B21A;
+	width: 100px;
+	height: 185px;
+	float: left;
+	font-size: 13px;
+}
+#createThinkingTitle
+{
+	background-color: #F0B21A;
+	border-bottom: 1px solid black;
+	margin-bottom: 15px;
+}
+#createCommunication
+{
+	background-color: #3FA3BB;
+	width: 100px;
+	height: 185px;
+	float: left;
+	font-size: 13px;
+}
+#createCommunicationTitle
+{
+	background-color: #3FA3BB;
+	border-bottom: 1px solid black;
+	margin-bottom: 15px;
+}
+#createApplication
+{
+	background-color: #D14628;
+	width: 100px;
+	height: 185px;
+	float: left;
+	font-size: 13px;
+}
+#createApplicationTitle
+{
+	background-color: #D14628;
+	border-bottom: 1px solid black;
+	margin-bottom: 15px;
+}
+#createAssessmentButton
+{
+	margin-top: 7px;
+}
+
 ::-webkit-scrollbar
 {
 	width: 10px;

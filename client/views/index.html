@@ -134,45 +134,46 @@
 			</div>
 		</div>
 		<div id='createAssessmentPanel' style='display: {{createAssessmentVisibility}}'>
-			<input id='editAssessmentNameField' type='text'/><br>
-			<select id='editAssessmentWeightField' value='{{editingAssessmentWeightType}}'>
-				{{#each createAssessmentWeightTypeOptions}}
-					{{> createAssessmentWeightTypeOption}}
+			<input id='createAssessmentNameField' type='text'/><br>
+			<select id='createAssessmentWeightField'>
+				{{#each editingAssessmentWeightTypeOptions}}
+					{{> editAssessmentWeightTypeOption}}
 				{{/each}}
 			</select>
-			<div id='editCategories'>
-				<div id='editKnowledge'>
-					<div id='editKnowledgeTitle'>Knowledge</div>
-					<input id='editKnowledgeEnabled' type='checkbox' checked>
-					<div id='editKnowledgePanel'>
+			<div id='createCategories'>
+				<div id='createKnowledge'>
+					<div id='createKnowledgeTitle'>Knowledge</div>
+					<div id='createKnowledgePanel'>
 						Percentage:<br>
-						<input type='number' id='editKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
+						<input type='number' id='createKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
 					</div>
 				</div>
-				<div id='editThinking'>
-					<div id='editThinkingTitle'>Thinking</div>
-					<input id='editThinkingEnabled' type='checkbox' checked>
-					<div id='editThinkingPanel'>
+				<div id='createThinking'>
+					<div id='createThinkingTitle'>Thinking</div>
+					<div id='createThinkingPanel'>
 						Percentage<br>
-						<input type='number' id='editThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
+						<input type='number' id='createThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
 					</div>
 				</div>
-				<div id='editCommunication'>
-					<div id='editCommunicationTitle'>Communication</div>
-					<input id='editCommunicationEnabled' type='checkbox' checked>
-					<div id='editCommunicationPanel'>
+				<div id='createCommunication'>
+					<div id='createCommunicationTitle'>Communication</div>
+					<div id='createCommunicationPanel'>
 						Percentage<br>
-						<input type='number' id='editCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
+						<input type='number' id='createCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
 					</div>
 				</div>
-				<div id='editApplication'>
-					<div id='editApplicationTitle'>Application</div>
-					<input id='editApplicationEnabled' type='checkbox' checked>
-					<div id='editApplicationPanel'>
+				<div id='createApplication'>
+					<div id='createApplicationTitle'>Application</div>
+					<div id='createApplicationPanel'>
 						Percentage<br>
-						<input type='number' id='editApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
+						<input type='number' id='createApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
 					</div>
 				</div>
+			</div>
+			<div id='createAssessmentButtonContainer'>
+				<input id='createAssessmentButton' type="button" value="Finish"/>
+			</div>
+			<div id='createAssessmentError'>
 			</div>
 		</div>
 	</div>
@@ -294,19 +295,19 @@
 			</div>
 		</div>
 		<div class='markBars'>
-			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
-				<div class='barFG' style='/*width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}} * {{assessmentApplicationPercent}}); */width: calc(100% * {{assessmentCommunicationPercent}}); border-color: #D14628;'>
+			<div class='barBG' style='display: {{assessmentADisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
+				<div class='barFG' style='/*width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}} * {{assessmentApplicationPercent}}); */width: calc(100% * {{assessmentApplicationPercent}}); border-color: #D14628;'>
 				</div>
 			</div>
-			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>
+			<div class='barBG' style='display: {{assessmentCDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>
 				<div class='barFG' style='width: calc(100% * {{assessmentCommunicationPercent}}); border-color: #3FA3BB;'>
 				</div>
 			</div>
-			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #CCA241;'>
+			<div class='barBG' style='display: {{assessmentTDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #CCA241;'>
 				<div class='barFG' style='width: calc(100% * {{assessmentThinkingPercent}}); border-color: #F0B21A;'>
 				</div>
 			</div>
-			<div class='barBG' style='width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #5C8743;'>
+			<div class='barBG' style='display: {{assessmentKDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #5C8743;'>
 				<div class='barFG' style='width: calc(100% * {{assessmentKnowledgePercent}}); border-color: #6BB145;'>
 				</div>
 			</div>
