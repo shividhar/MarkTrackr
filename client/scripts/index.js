@@ -351,11 +351,10 @@ if (Meteor.isClient)
 		
 		, 'change .editAssessmentPercent': function(event)
 		{
-			console.log('Here');
 			var assessmentTypes = Classes.findOne({_id: /*Router.current().data().classes._id*/this.classes._id}).assessmentTypes;
 			for(var i = 0; i < assessmentTypes.length; i++)
 			{
-				if(assessmentTypes[i].typeName == $(event.target).val())
+				if(assessmentTypes[i].typeName == $('#editAssessmentWeightField').val())
 				{
 					var at = assessmentTypes[i];
 					
@@ -379,14 +378,35 @@ if (Meteor.isClient)
 							cats.push($('#editApplicationPercent').val());
 						}
 					}
-					
-					Meteor.call('changeAssessmentCategoryPercentages', {_id: Session.get('editingAssessmentId')._id, newCategoryPercentages: cats }, function(error){
+					Meteor.call('changeAssessmentCategoryPercentages', {assessmentId: Session.get('editingAssessmentId')._id, newCategoryPercentages: cats }, function(error){
 						if(error)
 						{
 							console.log(error);
 						}
 					});
+					return;
 				}
+			}
+		}
+
+		, 'change #editAssessmentNameField': function(event)
+		{
+			var n = $('#editAssessmentNameField').val();
+			if(n == "")
+			{
+				$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
+				return;
+			}
+			else
+			{
+				Meteor.call('changeAssessmentTitle', {assessmentId: Session.get('editingAssessmentId')._id, newTitle: n}, function(error)
+				{
+					if(error)
+					{
+						console.log(error);
+						$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
+					}
+				});
 			}
 		}
 	});
@@ -948,7 +968,13 @@ if (Meteor.isClient)
 
 		, 'click .assessmentRemoveSymbol' : function(event)
 		{
-			
+			Meteor.call("deleteAssessment", {assessmentId: this._id}, function(error)
+			{
+				if(error)
+				{
+					console.log(error);
+				}
+			});
 		}
 	});
 }
