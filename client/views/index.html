@@ -39,28 +39,28 @@
 					<div id='editKnowledgeTitle'>Knowledge</div>
 					<div id='editKnowledgePanel'>
 						Percentage:<br>
-						<input type='number' id='editKnowledgePercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
+						<input type='number' id='editKnowledgePercent' class='editAssessmentPercent' min='0' max='100' value='100' {{editKnowledgeDisable}}>
 					</div>
 				</div>
 				<div id='editThinking'>
 					<div id='editThinkingTitle'>Thinking</div>
 					<div id='editThinkingPanel'>
 						Percentage<br>
-						<input type='number' id='editThinkingPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
+						<input type='number' id='editThinkingPercent' class='editAssessmentPercent' min='0' max='100' value='100' {{editThinkingDisable}}>
 					</div>
 				</div>
 				<div id='editCommunication'>
 					<div id='editCommunicationTitle'>Communication</div>
 					<div id='editCommunicationPanel'>
 						Percentage<br>
-						<input type='number' id='editCommunicationPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
+						<input type='number' id='editCommunicationPercent' class='editAssessmentPercent' min='0' max='100' value='100' {{editCommunicationDisable}}>
 					</div>
 				</div>
 				<div id='editApplication'>
 					<div id='editApplicationTitle'>Application</div>
 					<div id='editApplicationPanel'>
 						Percentage<br>
-						<input type='number' id='editApplicationPercent' min='0' max='100' value='100' {{editApplicationDisable}}>
+						<input type='number' id='editApplicationPercent' min='0' class='editAssessmentPercent' max='100' value='100' {{editApplicationDisable}}>
 					</div>
 				</div>
 			</div>
@@ -297,7 +297,7 @@
 		</div>
 		<div class='markBars'>
 			<div class='barBG' style='display: {{assessmentADisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
-				<div class='barFG' style='/*width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}} * {{assessmentApplicationPercent}}); */width: calc(100% * {{assessmentApplicationPercent}}); border-color: #D14628;'>
+				<div class='barFG' style='width: calc(100% * {{assessmentApplicationPercent}}); border-color: #D14628;'>
 				</div>
 			</div>
 			<div class='barBG' style='display: {{assessmentCDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>

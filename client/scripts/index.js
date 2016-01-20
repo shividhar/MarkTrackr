@@ -301,6 +301,94 @@ if (Meteor.isClient)
 				}
 			});
 		}
+		
+		, 'change #editAssessmentWeightField' : function(event)
+		{
+			var assessmentTypes = Classes.findOne({_id: /*Router.current().data().classes._id*/this.classes._id}).assessmentTypes;
+			for(var i = 0; i < assessmentTypes.length; i++)
+			{
+				if(assessmentTypes[i].typeName == $(event.target).val())
+				{
+					var at = assessmentTypes[i];
+					
+					$('#editKnowledge').css('background-color', (at.categories.indexOf('knowledge') != -1 ? '#6BB145': '#9CAF92'));
+					$('#editThinking').css('background-color', (at.categories.indexOf('thinking') != -1 ? '#F0B21A': '#EFD594'));
+					$('#editCommunication').css('background-color', (at.categories.indexOf('communication') != -1 ? '#3FA3BB': '#87B0BA'));
+					$('#editApplication').css('background-color', (at.categories.indexOf('application') != -1 ? '#D14628': '#D19183'));
+					
+					$('#editKnowledgePercent').prop('disabled', at.categories.indexOf('knowledge') == -1);
+					$('#editThinkingPercent').prop('disabled', at.categories.indexOf('thinking') == -1);
+					$('#editCommunicationPercent').prop('disabled', at.categories.indexOf('communication') == -1);
+					$('#editApplicationPercent').prop('disabled', at.categories.indexOf('application') == -1);
+					console.log(at.categories);
+					var cats = [];
+					for(var j = 0; j < at.categories.length; j++)
+					{
+						if(at.categories[j] == "knowledge")
+						{
+							cats.push($('#editKnowledgePercent').val());
+						}
+						if(at.categories[j] == "thinking")
+						{
+							cats.push($('#editThinkingPercent').val());
+						}
+						if(at.categories[j] == "communication")
+						{
+							cats.push($('#editCommunicationPercent').val());
+						}
+						if(at.categories[j] == "application")
+						{
+							cats.push($('#editApplicationPercent').val());
+						}
+					}
+					console.log(cats);
+					Meteor.call('changeAssessmentType', {assessmentId: Session.get('editingAssessmentId')._id, parentClassId: Session.get('editingAssessmentId').parentClassId, newAssessmentType: $(event.target).val(), newAssessmentCategoryPercentages: cats });
+					
+					break;
+				}
+			}
+		}
+		
+		, 'change .editAssessmentPercent': function(event)
+		{
+			console.log('Here');
+			var assessmentTypes = Classes.findOne({_id: /*Router.current().data().classes._id*/this.classes._id}).assessmentTypes;
+			for(var i = 0; i < assessmentTypes.length; i++)
+			{
+				if(assessmentTypes[i].typeName == $(event.target).val())
+				{
+					var at = assessmentTypes[i];
+					
+					var cats = [];
+					for(var j = 0; j < at.categories.length; j++)
+					{
+						if(at.categories[j] == "knowledge")
+						{
+							cats.push($('#editKnowledgePercent').val());
+						}
+						if(at.categories[j] == "thinking")
+						{
+							cats.push($('#editThinkingPercent').val());
+						}
+						if(at.categories[j] == "communication")
+						{
+							cats.push($('#editCommunicationPercent').val());
+						}
+						if(at.categories[j] == "application")
+						{
+							cats.push($('#editApplicationPercent').val());
+						}
+					}
+					
+					Meteor.call('changeAssessmentCategoryPercentages', {_id: Session.get('editingAssessmentId')._id, newCategoryPercentages: cats }, function(error){
+						if(error)
+						{
+							console.log(error);
+						}
+					});
+				}
+			}
+		}
 	});
 
 	Template.classElement.events({
@@ -916,11 +1004,72 @@ if (Meteor.isClient)
 			//Session.set('editingAssessmentId', )
 			Session.set('showEditAssessmentPanel', true);
 			$('#editAssessmentNameField').val(this.title);
+			
+			var assessmentTypes = Classes.findOne({_id: Router.current().data().classes._id}).assessmentTypes;
+			for(var i = 0; i < assessmentTypes.length; i++)
+			{
+				if(assessmentTypes[i].typeName == this.type)
+				{
+					$('#editKnowledge').css('background-color', (assessmentTypes[i].categories.indexOf('knowledge') != -1 ? '#6BB145': '#9CAF92'));
+					$('#editThinking').css('background-color', (assessmentTypes[i].categories.indexOf('thinking') != -1 ? '#F0B21A': '#EFD594'));
+					$('#editCommunication').css('background-color', (assessmentTypes[i].categories.indexOf('communication') != -1 ? '#3FA3BB': '#87B0BA'));
+					$('#editApplication').css('background-color', (assessmentTypes[i].categories.indexOf('application') != -1 ? '#D14628': '#D19183'));
+					
+					var ki = assessmentTypes[i].categories.indexOf('knowledge');
+					var ti = assessmentTypes[i].categories.indexOf('thinking');
+					var ci = assessmentTypes[i].categories.indexOf('communication');
+					var ai = assessmentTypes[i].categories.indexOf('application');
+					if(ki == -1)
+					{
+						$('#editKnowledgePercent').prop('disabled', true);
+						$('#editKnowledgePercent').val('100');
+					}
+					else
+					{
+						$('#editKnowledgePercent').prop('disabled', false);
+						$('#editKnowledgePercent').val(this.categoryPercentages[ki]);
+					}
+					if(ti == -1)
+					{
+						$('#editThinkingPercent').prop('disabled', true);
+						$('#editThinkingPercent').val('100');
+					}
+					else
+					{
+						$('#editThinkingPercent').prop('disabled', false);
+						$('#editThinkingPercent').val(this.categoryPercentages[ti]);
+					}
+					if(ci == -1)
+					{
+						$('#editCommunicationPercent').prop('disabled', true);
+						$('#editCommunicationPercent').val('100');
+					}
+					else
+					{
+						$('#editCommunicationPercent').prop('disabled', false);
+						$('#editCommunicationPercent').val(this.categoryPercentages[ci]);
+					}
+					if(ai == -1)
+					{
+						$('#editApplicationPercent').prop('disabled', true);
+						$('#editApplicationPercent').val('100');
+					}
+					else
+					{
+						$('#editApplicationPercent').prop('disabled', false);
+						$('#editApplicationPercent').val(this.categoryPercentages[ai]);
+					}
+					
+					Session.set('editingAssessmentId', this);
+					
+					break;
+				}
+			}
 		}
 
 		, 'click .assessmentRemoveSymbol' : function(event)
 		{
-
+			
 		}
 	});
 }
