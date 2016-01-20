@@ -12,7 +12,7 @@ if(Meteor.isServer){
 			throw new Meteor.Error("Account creation failed.");
 		}
 	})
-	if(process.platform == "darwin" || process.platform == "win32"){
+	if(process.platform == "darwin"){
 		ServiceConfiguration.configurations.remove({
 			service: "google"
 		});
@@ -27,8 +27,8 @@ if(Meteor.isServer){
 		});
 		ServiceConfiguration.configurations.insert({
 			service: "google",
-			clientId: "621345241519-dctp71gig6tfp3i0vpc822ctk41513mn.apps.googleusercontent.com",
-			secret: "CogPXU1Wjya2YYqw74EF_PN2"
+			clientId: "621345241519-d711u7iesv9c3vrftuvsr5r7360pr82g.apps.googleusercontent.com",
+			secret: "20F2FSZtOlv-0tSzZoRrHD90"
 		});
 	}
 }
