@@ -27,6 +27,7 @@ if (Meteor.isClient)
 			else
 			{
 				return 'none';
+				
 			}
 		}
 
@@ -91,6 +92,7 @@ if (Meteor.isClient)
 		, 'click #classCreate' : function(event)
 		{
 			Session.set('showCreateClassPanel', true);
+			$('#createClassError').html("");
 			Session.set('ccawt', []);
 			$('#createClassNameField').val('[Class Name Here]');
 			$('#createClassKnowledgeInput').val('25');
@@ -1139,6 +1141,7 @@ if (Meteor.isClient)
 		, 'click #assessmentCreate': function(event)
 		{
 			Session.set("showCreateAssessmentPanel", true);
+			$('#createAssessmentError').html("");
 			var assessType = Classes.findOne({_id: this.classes._id}).assessmentTypes[0];
 			$('#createAssessmentNameField').val('AssessmentSmith');
 			$('#createAssessmentWeightField').val(assessType.typeName);
