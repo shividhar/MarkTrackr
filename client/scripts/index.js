@@ -1589,7 +1589,7 @@ function calculatePercentages(t)
 	
 // Calculating total average	
 
-	var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
+	var totalAverage = (weightedKnowledgeAverage * t.classes.categoryWeightings[0] / 100 + weightedThinkingAverage * t.classes.categoryWeightings[1] / 100 + weightedCommunicationAverage * t.classes.categoryWeightings[3] / 100 + weightedApplicationAverage * t.classes.categoryWeightings[2] / 100);
 	var canvas = $('#percentage');
 	if(canvas && canvas[0])
 	{
