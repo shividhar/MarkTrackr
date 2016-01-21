@@ -485,12 +485,16 @@ html, body
 }
 #editAssessmentNameField
 {
+	width: 99%;
 	border: 0;
+	outline: none;
 	text-align: center;
-	width: 100%;
 	font-size: 20px;
-	margin-top: 20px;
-	margin-bottom: 5px;
+}
+
+#editAssessmentNameField:hover
+{
+	background-color: #D3D3D3;
 }
 #editCategories
 {
@@ -568,7 +572,7 @@ html, body
 
 #editClassNameField
 {
-	/*width: 99%;*/
+	width: 99%;
 	border: 0;
 	outline: none;
 	text-align: center;
