@@ -415,7 +415,154 @@ if (Meteor.isClient)
 				});
 			}
 		}
-
+		
+		, 'change #editClassNameField': function(event)
+		{
+			var n = $('#editClassNameField').val();
+			if(n == "")
+			{
+				$('#editClassNameField').val(Classes.findOne({_id: this.classes._id}).title);
+				return;
+			}
+			else
+			{
+				Meteor.call('changeClassTitle', {classId: this.classes._id, newTitle: n}, function(error)
+				{
+					if(error)
+					{
+						console.log(error);
+						$('#editClassNameField').val(Classes.findOne({_id: this.classes._id}).title);
+					}
+				});
+			}
+		}
+		
+		, 'change #editClassKnowledgeInput': function(event)
+		{
+			var v = Number($(event.target).val());
+			if(v < 0)
+			{
+				v = Math.abs(v);
+			}
+			if(v == 0)
+			{
+				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[0];
+			}
+			$(event.target).val(v);
+			
+			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "knowledge", categoryWeightToChange: v}, function(error)
+			{
+				if(error)
+				{
+					$('#editClassError').html(''+error);
+					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[0]);
+					return;
+				}
+			});
+		}
+		
+		, 'change #editClassThinkingInput': function(event)
+		{
+			var v = Number($(event.target).val());
+			if(v < 0)
+			{
+				v = Math.abs(v);
+			}
+			if(v == 0)
+			{
+				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[1];
+			}
+			$(event.target).val(v);
+			
+			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "thinking", categoryWeightToChange: v}, function(error)
+			{
+				if(error)
+				{
+					$('#editClassError').html(''+error);
+					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[1]);
+					return;
+				}
+			});
+		}
+		
+		, 'change #editClassCommunicationInput': function(event)
+		{
+			var v = Number($(event.target).val());
+			if(v < 0)
+			{
+				v = Math.abs(v);
+			}
+			if(v == 0)
+			{
+				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[3];
+			}
+			$(event.target).val(v);
+			
+			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "communication", categoryWeightToChange: v}, function(error)
+			{
+				if(error)
+				{
+					$('#editClassError').html(''+error);
+					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[3]);
+					return;
+				}
+			});
+		}
+		
+		, 'change #editClassApplicationInput': function(event)
+		{
+			var v = Number($(event.target).val());
+			if(v < 0)
+			{
+				v = Math.abs(v);
+			}
+			if(v == 0)
+			{
+				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[2];
+			}
+			$(event.target).val(v);
+			
+			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "application", categoryWeightToChange: v}, function(error)
+			{
+				if(error)
+				{
+					$('#editClassError').html(''+error);
+					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[2]);
+					return;
+				}
+			});
+		}
+		
+		, 'click #editCCAWT': function(event)
+		{
+			/*
+			var n = Session.get('ccawt').slice(0);
+			n.push({ ccawtName: "Test", ccawtWeight: 1, categories: ["knowledge", "thinking", "communication", "application"], rID: Math.floor(Math.random() * 10000) });
+			Session.set('ccawt', n);*/
+			Meteor.call("addAssessmentType", {classId: this.classes._id, newAssessmentType: { typeName: "[Change This Name]", weight: 1, categories: ["knowledge", "thinking", "communication", "application"]}}, function(error){
+				if(error)
+				{
+					console.log(error);
+				}
+				else
+				{
+					/*
+					var assessTypes = Classes.findOne({_id: Router.current().data().classes._id}).assessmentTypes;
+					var at = new Array(assessTypes.length);
+					for(var i = 0; i < at.length; i++)
+					{
+						at[i] = {ecawtName: assessTypes[i].typeName, ecawtWeight: assessTypes[i].weight, categories: assessTypes[i].categories};
+					}
+					Session.set('ecawt', at);
+					*/
+					var n = Session.get('ecawt').slice(0);
+					n.push({ ecawtName: "[Change This Name]", ecawtWeight: 1, categories: ["knowledge", "thinking", "communication", "application"], rID: Math.floor(Math.random() * 10000) });
+					Session.set('ecawt', n);
+				}
+			});
+		}
+		
+		/*
 		, 'change #editClassButton': function(event)
 		{
 			var n = $('#editClassNameField').val();
@@ -515,8 +662,8 @@ if (Meteor.isClient)
 					console.log(error);
 					$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
 				}
-			});*/
-		}
+			});*
+		}*/
 	});
 
 	Template.classElement.events({
@@ -774,16 +921,28 @@ if (Meteor.isClient)
 			{
 				$(event.target).val(this.ecawtName);
 			}
-			var n = Session.get('ecawt');
-			for(var i = 0; i < n.length; i++)
+			var t = this;
+			Meteor.call('changeAssessmentTypeName', {classId: Router.current().data().classes._id, previousAssessmentTypeName: this.ecawtName, newAssessmentTypeName: $(event.target).val()}, function(error)
 			{
-				if(n[i].rID == this.rID)
+				if(error)
 				{
-					n[i].ecawtName = $(event.target).val();
-					break;
+					$(event.target).val(t.ecawtName);
+					console.log(error);
 				}
-			}
-			Session.set('ecawt', n);
+				else
+				{
+					var n = Session.get('ecawt');
+					for(var i = 0; i < n.length; i++)
+					{
+						if(n[i].rID == t.rID)
+						{
+							n[i].ecawtName = $(event.target).val();
+							break;
+						}
+					}
+					Session.set('ecawt', n);
+				}
+			});
 		}
 		, 'change .ecawtWeight': function(event)
 		{
@@ -797,19 +956,32 @@ if (Meteor.isClient)
 				val = 1;
 			}
 			$(event.target).val(val);
-			var n = Session.get('ecawt');
-			for(var i = 0; i < n.length; i++)
+			var t = this;
+			Meteor.call('changeAssessmentTypeWeighting', {classId: Router.current().data().classes._id, assessmentTypeName: this.ecawtName, newAssessmentTypeWeighting: val}, function(error)
 			{
-				if(n[i].rID == this.rID)
+				if(error)
 				{
-					n[i].ecawtWeight = $(event.target).val();
-					break;
+					$(event.target).val(t.ecawtName);
+					console.log(error);
 				}
-			}
-			Session.set('ecawt', n);
+				else
+				{
+					var n = Session.get('ecawt');
+					for(var i = 0; i < n.length; i++)
+					{
+						if(n[i].rID == t.rID)
+						{
+							n[i].ecawtWeight = val;
+							break;
+						}
+					}
+					Session.set('ecawt', n);
+				}
+			});
 		}
 		, 'click .ecawtRemove': function(event)
 		{
+			/*
 			var n = Session.get('ecawt').slice(0);
 			for(var i = 0; i < n.length; i++)
 			{
@@ -819,7 +991,37 @@ if (Meteor.isClient)
 					break;
 				}
 			}
-			Session.set('ecawt', n);
+			Session.set('ecawt', n);*/
+			var classes = Classes.findOne({_id: Router.current().data().classes._id});
+			var t = this;
+			for(var i = 0; i < classes.assessmentTypes.length; i++)
+			{
+				if(classes.assessmentTypes[i].typeName == this.ecawtName)
+				{
+					Meteor.call('deleteAssessmentType', {classId: Router.current().data().classes._id, assessmentTypeToDelete: classes.assessmentTypes[i] }, function(error){
+						if(error)
+						{
+							$('editClassError').html(''+error);
+							console.log(error);
+						}
+						else
+						{
+							var n = Session.get('ecawt').slice(0);
+							for(var i = 0; i < n.length; i++)
+							{
+								if(n[i].rID == t.rID)
+								{
+									n.splice(i, 1);
+									break;
+								}
+							}
+							Session.set('ecawt', n);
+						}
+					});
+					break;
+				}
+			}
+			//Meteor.call('deleteAssessmentType', {classId: this.classes._id, assessmentTypeToDelete: })
 		}
 		, 'click .ecawtK': function(event)
 		{
@@ -1000,7 +1202,7 @@ if (Meteor.isClient)
 			var at = new Array(classData.assessmentTypes.length);
 			for(var i = 0; i < at.length; i++)
 			{
-				at[0] = { ecawtName: classData.assessmentTypes[i].typeName, ecawtWeight: classData.assessmentTypes[i].weight, categories: classData.assessmentTypes[i].categories, rID: Math.floor(Math.random() * 10000) };
+				at[i] = { ecawtName: classData.assessmentTypes[i].typeName, ecawtWeight: classData.assessmentTypes[i].weight, categories: classData.assessmentTypes[i].categories, rID: Math.floor(Math.random() * 10000) };
 			}
 			Session.set('ecawt', at);
 		}
