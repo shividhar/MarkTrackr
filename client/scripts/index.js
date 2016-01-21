@@ -342,7 +342,11 @@ if (Meteor.isClient)
 						}
 					}
 					console.log(cats);
-					Meteor.call('changeAssessmentType', {assessmentId: Session.get('editingAssessmentId')._id, parentClassId: Session.get('editingAssessmentId').parentClassId, newAssessmentType: $(event.target).val(), newAssessmentCategoryPercentages: cats });
+					Meteor.call('changeAssessmentType', {assessmentId: Session.get('editingAssessmentId')._id, parentClassId: Session.get('editingAssessmentId').parentClassId, newAssessmentType: $(event.target).val(), newAssessmentCategoryPercentages: cats }, function(err){
+						if(!err){
+
+						}
+					});
 					
 					break;
 				}
@@ -405,6 +409,8 @@ if (Meteor.isClient)
 					{
 						console.log(error);
 						$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
+					}else{
+						Session.set('showEditAssessmentPanel', false);
 					}
 				});
 			}
@@ -1043,7 +1049,7 @@ if (Meteor.isClient)
 				var j = at[i].categories.indexOf('knowledge');
 				if(j != -1)
 				{
-					return (this.categoryPercentages[j]) / 100;
+					return (this.categoryPercentages[j]);
 				}
 			}
 			return 0;
@@ -1066,7 +1072,7 @@ if (Meteor.isClient)
 				var j = at[i].categories.indexOf('thinking');
 				if(j != -1)
 				{
-					return (this.categoryPercentages[j]) / 100;
+					return (this.categoryPercentages[j]);
 				}
 			}
 			return 0;
@@ -1089,7 +1095,7 @@ if (Meteor.isClient)
 				var j = at[i].categories.indexOf('communication');
 				if(j != -1)
 				{
-					return (this.categoryPercentages[j]) / 100;
+					return (this.categoryPercentages[j]);
 				}
 			}
 			return 0;
@@ -1112,7 +1118,7 @@ if (Meteor.isClient)
 				var j = at[i].categories.indexOf('application');
 				if(j != -1)
 				{
-					return (this.categoryPercentages[j]) / 100;
+					return (this.categoryPercentages[j]);
 				}
 			}
 			return 0;

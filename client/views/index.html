@@ -393,19 +393,23 @@
 		</div>
 		<div class='markBars'>
 			<div class='barBG' style='display: {{assessmentADisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #A85443;'>
-				<div class='barFG' style='width: calc(100% * {{assessmentApplicationPercent}}); border-color: #D14628;'>
+				<div class='barFG' style='width: calc(1% * {{assessmentApplicationPercent}}); border-color: #D14628;'>
+				<span>Application: {{assessmentApplicationPercent}}%</span>
 				</div>
 			</div>
 			<div class='barBG' style='display: {{assessmentCDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #4C8A99;'>
-				<div class='barFG' style='width: calc(100% * {{assessmentCommunicationPercent}}); border-color: #3FA3BB;'>
+				<div class='barFG' style='width: calc(1% * {{assessmentCommunicationPercent}}); border-color: #3FA3BB;'>
+				<span>Communication: {{assessmentCommunicationPercent}}%</span>
 				</div>
 			</div>
 			<div class='barBG' style='display: {{assessmentTDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #CCA241;'>
-				<div class='barFG' style='width: calc(100% * {{assessmentThinkingPercent}}); border-color: #F0B21A;'>
+				<div class='barFG' style='width: calc(1% * {{assessmentThinkingPercent}}); border-color: #F0B21A;'>
+				<span>Thinking: {{assessmentThinkingPercent}}%</span>
 				</div>
 			</div>
 			<div class='barBG' style='display: {{assessmentKDisplay}}; width: calc((100% - 573px - 25px * {{assessmentCategoryCount}}) / {{assessmentCategoryCount}}); border-color: #5C8743;'>
-				<div class='barFG' style='width: calc(100% * {{assessmentKnowledgePercent}}); border-color: #6BB145;'>
+				<div class='barFG' style='width: calc(1% * {{assessmentKnowledgePercent}}); border-color: #6BB145;'>
+				<span>Knowledge: {{assessmentKnowledgePercent}}%</span>
 				</div>
 			</div>
 		</div>
