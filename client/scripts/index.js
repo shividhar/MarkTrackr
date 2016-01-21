@@ -299,7 +299,6 @@ if (Meteor.isClient)
 				else
 				{
 					Session.set('showCreateAssessmentPanel', false);
-					console.log("Here8");
 					calculatePercentages(t);
 				}
 			});
@@ -347,7 +346,6 @@ if (Meteor.isClient)
 					var t = this;
 					Meteor.call('changeAssessmentType', {assessmentId: Session.get('editingAssessmentId')._id, parentClassId: Session.get('editingAssessmentId').parentClassId, newAssessmentType: $(event.target).val(), newAssessmentCategoryPercentages: cats }, function(err){
 						if(!err){
-							console.log("Here1");
 							calculatePercentages(t);
 						}
 					});
@@ -394,7 +392,6 @@ if (Meteor.isClient)
 						}
 						else
 						{
-							console.log("Here2");
 							calculatePercentages(t);
 						}
 					});
@@ -471,7 +468,6 @@ if (Meteor.isClient)
 				}
 				else
 				{
-					console.log("Here3");
 					calculatePercentages(t);
 				}
 			});
@@ -496,7 +492,6 @@ if (Meteor.isClient)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[1]);
-					console.log("Here4");
 					calculatePercentages(t);
 					return;
 				}
@@ -522,7 +517,6 @@ if (Meteor.isClient)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[3]);
-					console.log("Here5");
 					calculatePercentages(t);
 					return;
 				}
@@ -548,7 +542,6 @@ if (Meteor.isClient)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[2]);
-					console.log("Here6");
 					calculatePercentages(t);
 					return;
 				}
@@ -1110,13 +1103,12 @@ if (Meteor.isClient)
 			}
 		}
 	});
-/*
+
 	Template.mainContent.rendered = function()
 	{
-		console.log("Here7");
 		calculatePercentages(Router.current().data());
 	};
-*/
+
 	Template.mainContent.helpers({
 		assessmentList: function()
 		{
@@ -1598,7 +1590,11 @@ function calculatePercentages(t)
 // Calculating total average	
 
 	var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
-	generatePercentageCircle($('#percentage')[0], 190, 130, totalAverage/100, 'rgb(154,205,50)', 'rgb(119,157,38)', 5, '#FAF0CA');
+	var canvas = $('#percentage');
+	if(canvas && canvas[0])
+	{
+		generatePercentageCircle(canvas[0], 190, 130, totalAverage/100, 'rgb(154,205,50)', 'rgb(119,157,38)', 5, '#FAF0CA');
+	}
 }
 
 function generatePercentageCircle(canvas, radius, clearRadius, percentage, colour, border, borderWidth, textColour)
