@@ -1025,6 +1025,7 @@ if (Meteor.isClient)
 		}
 		, 'click .ecawtK': function(event)
 		{
+			/*
 			var n = Session.get('ecawt');
 			for(var i = 0; i < n.length; i++)
 			{
@@ -1049,11 +1050,48 @@ if (Meteor.isClient)
 					break;
 				}
 			}
-			Session.set('ecawt', n);
+			Session.set('ecawt', n);*/
+			
+			var n = Session.get('ecawt').slice(0);
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					if($(event.target)[0].checked)
+					{
+						var x = n[i].categories.indexOf("knowledge");
+						if(x == -1)
+						{
+							n[i].categories.push("knowledge");
+						}
+					}
+					else
+					{
+						var x = n[i].categories.indexOf("knowledge");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
+					}
+					Meteor.call('changeAssessmentTypeCategory', {classId: Router.current().data().classes._id, assessmentTypeName: this.ecawtName, newAssessmentTypeCategories: n[i].categories}, function(error){
+						if(error)
+						{
+							console.log(error);
+							$('#editClassError').html('' + error);
+						}
+						else
+						{
+							Session.set('ecawt', n);
+						}
+					});
+					break;
+				}
+			}
 		}
 		, 'click .ecawtT': function(event)
 		{
-			var n = Session.get('ecawt');
+						
+			var n = Session.get('ecawt').slice(0);
 			for(var i = 0; i < n.length; i++)
 			{
 				if(n[i].rID == this.rID)
@@ -1074,14 +1112,24 @@ if (Meteor.isClient)
 							n[i].categories.splice(x, 1);
 						}
 					}
+					Meteor.call('changeAssessmentTypeCategory', {classId: Router.current().data().classes._id, assessmentTypeName: this.ecawtName, newAssessmentTypeCategories: n[i].categories}, function(error){
+						if(error)
+						{
+							console.log(error);
+							$('#editClassError').html('' + error);
+						}
+						else
+						{
+							Session.set('ecawt', n);
+						}
+					});
 					break;
 				}
 			}
-			Session.set('ecawt', n);
 		}
 		, 'click .ecawtA': function(event)
 		{
-			var n = Session.get('ecawt');
+			var n = Session.get('ecawt').slice(0);
 			for(var i = 0; i < n.length; i++)
 			{
 				if(n[i].rID == this.rID)
@@ -1102,14 +1150,24 @@ if (Meteor.isClient)
 							n[i].categories.splice(x, 1);
 						}
 					}
+					Meteor.call('changeAssessmentTypeCategory', {classId: Router.current().data().classes._id, assessmentTypeName: this.ecawtName, newAssessmentTypeCategories: n[i].categories}, function(error){
+						if(error)
+						{
+							console.log(error);
+							$('#editClassError').html('' + error);
+						}
+						else
+						{
+							Session.set('ecawt', n);
+						}
+					});
 					break;
 				}
 			}
-			Session.set('ecawt', n);
 		}
 		, 'click .ecawtC': function(event)
 		{
-			var n = Session.get('ecawt');
+			var n = Session.get('ecawt').slice(0);
 			for(var i = 0; i < n.length; i++)
 			{
 				if(n[i].rID == this.rID)
@@ -1130,10 +1188,20 @@ if (Meteor.isClient)
 							n[i].categories.splice(x, 1);
 						}
 					}
+					Meteor.call('changeAssessmentTypeCategory', {classId: Router.current().data().classes._id, assessmentTypeName: this.ecawtName, newAssessmentTypeCategories: n[i].categories}, function(error){
+						if(error)
+						{
+							console.log(error);
+							$('#editClassError').html('' + error);
+						}
+						else
+						{
+							Session.set('ecawt', n);
+						}
+					});
 					break;
 				}
 			}
-			Session.set('ecawt', n);
 		}
 	});
 
