@@ -289,6 +289,7 @@ if (Meteor.isClient)
 					cats.push($('#createApplicationPercent').val());
 				}
 			}
+			var t = this;
 			Meteor.call("createAssessment", {title: n, parentClassId: this.classes._id, type: at.typeName, weight: at.weight, categories: at.categories, categoryPercentages: cats}, function(error){
 				if(error)
 				{
@@ -298,6 +299,8 @@ if (Meteor.isClient)
 				else
 				{
 					Session.set('showCreateAssessmentPanel', false);
+					console.log("Here8");
+					calculatePercentages(t);
 				}
 			});
 		}
@@ -320,7 +323,7 @@ if (Meteor.isClient)
 					$('#editThinkingPercent').prop('disabled', at.categories.indexOf('thinking') == -1);
 					$('#editCommunicationPercent').prop('disabled', at.categories.indexOf('communication') == -1);
 					$('#editApplicationPercent').prop('disabled', at.categories.indexOf('application') == -1);
-					console.log(at.categories);
+					
 					var cats = [];
 					for(var j = 0; j < at.categories.length; j++)
 					{
@@ -341,10 +344,11 @@ if (Meteor.isClient)
 							cats.push($('#editApplicationPercent').val());
 						}
 					}
-					console.log(cats);
+					var t = this;
 					Meteor.call('changeAssessmentType', {assessmentId: Session.get('editingAssessmentId')._id, parentClassId: Session.get('editingAssessmentId').parentClassId, newAssessmentType: $(event.target).val(), newAssessmentCategoryPercentages: cats }, function(err){
 						if(!err){
-
+							console.log("Here1");
+							calculatePercentages(t);
 						}
 					});
 					
@@ -382,10 +386,16 @@ if (Meteor.isClient)
 							cats.push($('#editApplicationPercent').val());
 						}
 					}
+					var t = this;
 					Meteor.call('changeAssessmentCategoryPercentages', {assessmentId: Session.get('editingAssessmentId')._id, newCategoryPercentages: cats }, function(error){
 						if(error)
 						{
 							console.log(error);
+						}
+						else
+						{
+							console.log("Here2");
+							calculatePercentages(t);
 						}
 					});
 					return;
@@ -450,6 +460,7 @@ if (Meteor.isClient)
 			}
 			$(event.target).val(v);
 			
+			var t = this;
 			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "knowledge", categoryWeightToChange: v}, function(error)
 			{
 				if(error)
@@ -457,6 +468,11 @@ if (Meteor.isClient)
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[0]);
 					return;
+				}
+				else
+				{
+					console.log("Here3");
+					calculatePercentages(t);
 				}
 			});
 		}
@@ -473,13 +489,15 @@ if (Meteor.isClient)
 				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[1];
 			}
 			$(event.target).val(v);
-			
+			var t = this;
 			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "thinking", categoryWeightToChange: v}, function(error)
 			{
 				if(error)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[1]);
+					console.log("Here4");
+					calculatePercentages(t);
 					return;
 				}
 			});
@@ -497,13 +515,15 @@ if (Meteor.isClient)
 				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[3];
 			}
 			$(event.target).val(v);
-			
+			var t = this;
 			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "communication", categoryWeightToChange: v}, function(error)
 			{
 				if(error)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[3]);
+					console.log("Here5");
+					calculatePercentages(t);
 					return;
 				}
 			});
@@ -521,13 +541,15 @@ if (Meteor.isClient)
 				v = Classes.findOne({_id: this.classes._id}).categoryWeightings[2];
 			}
 			$(event.target).val(v);
-			
+			var t = this;
 			Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryName: "application", categoryWeightToChange: v}, function(error)
 			{
 				if(error)
 				{
 					$('#editClassError').html(''+error);
 					$(event.target).val(Classes.findOne({_id: this.classes._id}).categoryWeightings[2]);
+					console.log("Here6");
+					calculatePercentages(t);
 					return;
 				}
 			});
@@ -535,10 +557,6 @@ if (Meteor.isClient)
 		
 		, 'click #editCCAWT': function(event)
 		{
-			/*
-			var n = Session.get('ccawt').slice(0);
-			n.push({ ccawtName: "Test", ccawtWeight: 1, categories: ["knowledge", "thinking", "communication", "application"], rID: Math.floor(Math.random() * 10000) });
-			Session.set('ccawt', n);*/
 			Meteor.call("addAssessmentType", {classId: this.classes._id, newAssessmentType: { typeName: "[Change This Name]", weight: 1, categories: ["knowledge", "thinking", "communication", "application"]}}, function(error){
 				if(error)
 				{
@@ -546,124 +564,12 @@ if (Meteor.isClient)
 				}
 				else
 				{
-					/*
-					var assessTypes = Classes.findOne({_id: Router.current().data().classes._id}).assessmentTypes;
-					var at = new Array(assessTypes.length);
-					for(var i = 0; i < at.length; i++)
-					{
-						at[i] = {ecawtName: assessTypes[i].typeName, ecawtWeight: assessTypes[i].weight, categories: assessTypes[i].categories};
-					}
-					Session.set('ecawt', at);
-					*/
 					var n = Session.get('ecawt').slice(0);
 					n.push({ ecawtName: "[Change This Name]", ecawtWeight: 1, categories: ["knowledge", "thinking", "communication", "application"], rID: Math.floor(Math.random() * 10000) });
 					Session.set('ecawt', n);
 				}
 			});
 		}
-		
-		/*
-		, 'change #editClassButton': function(event)
-		{
-			var n = $('#editClassNameField').val();
-			if(n == "")
-			{
-				$('#editClassNameField').val(Classes.findOne({_id: this.classes._id}).title);
-				return;
-			}
-			var atRaw = Session.get('ecawt');
-			if(atRaw.length == 0)
-			{
-				$('#editClassError').html("No assessment types!");
-				return;
-			}
-			var at = new Array(atRaw.length);
-			for(var i = 0; i < atRaw.length; i++)
-			{
-				at[i] = { typeName: atRaw[i].ecawtName, weight: atRaw[i].ecawtWeight, categories: atRaw[i].categories };
-			}
-
-			var k = $('#editClassKnowledgeInput').val();
-			var t = $('#editClassThinkingInput').val();
-			var c = $('#editClassCommunicationInput').val();
-			var a = $('#editClassApplicationInput').val();
-
-			if(k < 0 || t < 0 || c < 0 || a < 0)
-			{
-				$('#editClassError').html("Some categories are negative!");
-				return;
-			}
-			if(k+t+c+a != 100)
-			{
-				$('#editClassError').html("Categories do not add up to 100%!");
-				return;	
-			}
-			Meteor.call('changeClassTitle', {classId: this.classes._id, newTitle: n}, function(error)
-			{
-				if(error)
-				{
-					$('#editClassError').html("" + error);
-					return;
-				}
-				else
-				{
-					Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: k, categoryName: "knowledge"}, function(error)
-					{
-						if(error)
-						{
-							$('#editClassError').html("" + error);
-							return;
-						}
-						else
-						{
-							Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: t, categoryName: "thinking"}, function(error)
-							{
-								if(error)
-								{
-									$('#editClassError').html("" + error);
-									return;
-								}
-								else
-								{
-									Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: c, categoryName: "communication"}, function(error)
-									{
-										if(error)
-										{
-											$('#editClassError').html("" + error);
-											return;
-										}
-										else
-										{
-											Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: a, categoryName: "application"}, function(error)
-											{
-												if(error)
-												{
-													$('#editClassError').html("" + error);
-													return;
-												}
-												else
-												{
-													// YAY
-												}
-											});
-										}
-									});
-								}
-							});
-						}
-					});
-				}
-			});
-			/*
-			Meteor.call('changeAssessmentTitle', {assessmentId: Session.get('editingAssessmentId')._id, newTitle: n}, function(error)
-			{
-				if(error)
-				{
-					console.log(error);
-					$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
-				}
-			});*
-		}*/
 	});
 
 	Template.classElement.events({
@@ -678,7 +584,7 @@ if (Meteor.isClient)
 		, 'click .classRemoveSVG' : function(event, template)
 		{
 			if(confirm("Are you sure you want to delete this class?")){
-				if(Router.current().data().classes._id == this._id)
+				if(!Router.current().data || Router.current().data().classes._id == this._id)
 					{
 						Meteor.call("deleteClass", {classId: this._id}, function(error)
 						{
@@ -1204,13 +1110,13 @@ if (Meteor.isClient)
 			}
 		}
 	});
-
+/*
 	Template.mainContent.rendered = function()
 	{
-		var percentageCanvas = $('#percentage');
-		generatePercentageCircle(percentageCanvas[0], 190, 130, .93, 'rgb(154,205,50)', 'rgb(119,157,38)', 5, '#FAF0CA');
+		console.log("Here7");
+		calculatePercentages(Router.current().data());
 	};
-
+*/
 	Template.mainContent.helpers({
 		assessmentList: function()
 		{
@@ -1220,6 +1126,10 @@ if (Meteor.isClient)
 		, className: function()
 		{
 			return Classes.findOne({_id:this.classes._id}).title;
+		}
+		, drawCanvas: function()
+		{
+			calculatePercentages(Router.current().data());
 		}
 	});
 
@@ -1563,6 +1473,7 @@ if (Meteor.isClient)
 				if(error)
 				{
 					console.log(error);
+					calculatePercentages(Router.current().data());
 				}
 			});
 		}
@@ -1581,7 +1492,7 @@ function calculatePercentages(t)
 	_.each(knowledgeAssessments, function(assessmentTypeObject){
 		var knowledgeIndex = assessmentTypeObject.categories.indexOf("knowledge");
 
-		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		var assessments = Assessments.find({"parentClassId": t.classes._id, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
 
 		_.each(assessments, function(assessmentObject){
 			knowledgeAssessmentWeights.push(assessmentTypeObject.weight);
@@ -1598,7 +1509,7 @@ function calculatePercentages(t)
 	_.each(thinkingAssessments, function(assessmentTypeObject){
 		var thinkingIndex = assessmentTypeObject.categories.indexOf("thinking");
 
-		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		var assessments = Assessments.find({"parentClassId": t.classes._id, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
 		
 		_.each(assessments, function(assessmentObject){
 			thinkingAssessmentWeights.push(assessmentTypeObject.weight);
@@ -1615,7 +1526,7 @@ function calculatePercentages(t)
 	_.each(communicationAssessments, function(assessmentTypeObject){
 		var communicationIndex = assessmentTypeObject.categories.indexOf("communication");
 
-		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		var assessments = Assessments.find({"parentClassId": t.classes._id, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
 		
 		_.each(assessments, function(assessmentObject){
 			communicationAssessmentWeights.push(assessmentTypeObject.weight);
@@ -1632,7 +1543,7 @@ function calculatePercentages(t)
 	_.each(applicationAssessments, function(assessmentTypeObject){
 		var applicationIndex = assessmentTypeObject.categories.indexOf("application");
 
-		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		var assessments = Assessments.find({"parentClassId": t.classes._id, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
 		
 		_.each(assessments, function(assessmentObject){
 			applicationAssessmentWeights.push(assessmentTypeObject.weight);
@@ -1686,13 +1597,14 @@ function calculatePercentages(t)
 	
 // Calculating total average	
 
-var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
-
+	var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
+	generatePercentageCircle($('#percentage')[0], 190, 130, totalAverage/100, 'rgb(154,205,50)', 'rgb(119,157,38)', 5, '#FAF0CA');
 }
 
 function generatePercentageCircle(canvas, radius, clearRadius, percentage, colour, border, borderWidth, textColour)
 {
 	var c = canvas.getContext('2d');
+	c.clearRect(0, 0, canvas.width, canvas.height);
 	var centreX = canvas.width / 2;
 	var centreY = canvas.height / 2;
 
