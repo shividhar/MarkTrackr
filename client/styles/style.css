@@ -142,19 +142,24 @@ html, body
 {
 	float: left;
 	width: 160px;
-	font-size: 20px;
+	font-size: 15px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	text-align: center;
+	text-align: left;
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
 }
 .classRemove
 {
 	float: right;
 	height: 25px;
 	margin-right:2.5px;
-	margin-top:2.5px;
+	margin-top:3.5px;
+	vertical-align: middle;
 }
+
 
 #classCreate
 {
@@ -165,6 +170,10 @@ html, body
 	padding-bottom: 2.5px;
 	border-bottom: 1px solid black;
 	text-align: center;
+}
+
+#classCreate:hover {
+	background-color: #e3e3e3;
 }
 
 #main
@@ -338,6 +347,20 @@ html, body
 .markBars
 {}
 
+#classEditSymbol:hover{
+	opacity: 0.4;
+}
+
+.classRemoveSVG{
+	position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.classRemoveSVG:hover {
+	opacity: 0.4;
+}
+
 #assessmentCreate
 {
 	width: 100%;
@@ -346,6 +369,11 @@ html, body
 	padding-bottom: 2.5px;
 	text-align: center;
 	background-color: #FF8011;
+}
+
+#assessmentCreate:hover
+{
+	background-color:#D3D3D3;
 }
 
 #overlay
@@ -540,12 +568,16 @@ html, body
 
 #editClassNameField
 {
-	width: calc(100%);
+	/*width: 99%;*/
 	border: 0;
 	outline: none;
 	text-align: center;
-	font-size: 25px;
-	margin-top: 10px;
+	font-size: 20px;
+}
+
+#editClassNameField:hover
+{
+	background-color: #D3D3D3;
 }
 
 #editClassBottomDivision
@@ -702,6 +734,10 @@ html, body
 	background-color: #CCCCCC;
 	width: 100%;
 	height: 20px;
+}
+
+#editCCAWT:hover {
+	background-color: #909090;
 }
 #editClassButtonContainer
 {
@@ -878,6 +914,13 @@ html, body
 {
 	float: left;
 	margin-left: 3px;
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+}
+
+.ccawtRemove:hover {
+	opacity: 0.4;
 }
 #createCCAWT
 {
@@ -909,11 +952,13 @@ html, body
 {
 	border: 0;
 	text-align: center;
-	width: 100%;
+	width: 99%%;
 	font-size: 20px;
 	margin-top: 20px;
 	margin-bottom: 5px;
 }
+
+
 #createCategories
 {
 	margin-top: 15px;

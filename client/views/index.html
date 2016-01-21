@@ -11,8 +11,8 @@
 			{{/each}}
 			<div id="classCreate">
 				<svg width='25' height='25' viewBox='0 0 1 1'>
-					<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
-					<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+					<line x1='.5' x2='.5' y1='0.25' y2='0.75' stroke='black' stroke-width='.1'/>
+					<line y1='.5' y2='.5' x1='0.25' x2='0.75' stroke='black' stroke-width='.1'/>
 				</svg>
 			</div>
 		</div>
@@ -120,8 +120,8 @@
 						{{/each}}
 						<div id='editCCAWT'>
 							<svg width='20' height='20' viewBox='0 0 1 1'>
-								<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
-								<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+								<line x1='.5' x2='.5' y1='0.25' y2='0.75' stroke='black' stroke-width='.1'/>
+								<line y1='.5' y2='.5' x1='0.25' x2='0.75' stroke='black' stroke-width='.1'/>
 							</svg>
 						</div>
 					</div>
@@ -263,7 +263,7 @@
 		<div class='ccawtACont'>
 			<input class='ccawtA' type='checkBox' {{ccawtAHelper}}/>
 		</div>
-		<svg class='ccawtRemove' width='20' height='20' viewBox='0 0 1 1'>
+		<svg class='ccawtRemove' width='15' height='15' viewBox='0 0 1 1'>
 			<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
 			<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 		</svg>
@@ -286,7 +286,7 @@
 		<div class='ecawtACont'>
 			<input class='ecawtA' type='checkBox' {{ecawtAHelper}}/>
 		</div>
-		<svg class='ccawtRemove' width='20' height='20' viewBox='0 0 1 1'>
+		<svg class='ccawtRemove' width='15' height='15' viewBox='0 0 1 1'>
 			<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
 			<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 		</svg>
@@ -326,11 +326,11 @@
 
 <template name="classElement">
 	<div class="class">
-		<div class='classListName'>{{ title }}</div>
+		<span class='classListName'>{{ title }}</span>
 		<div class='classRemove'>
-			<svg class='classRemoveSVG' width='25' height='25' viewBox='0 0 1 1'>
-				<line class='classRemoveSVG' x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
-				<line class='classRemoveSVG' x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+			<svg class='classRemoveSVG' width='15' height='15' viewBox='0 0 1 1'>
+				<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+				<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
 			</svg>
 		</div>
 	</div>
