@@ -402,31 +402,33 @@ if (Meteor.isClient)
 		}
 		, 'click .classRemoveSVG' : function(event, template)
 		{
-			if(confirm("Are you sure you want to delete this class?"))
-			if(Router.current().data().classes._id == this._id)
-			{
-				Meteor.call("deleteClass", {classId: this._id}, function(error)
-				{
-					if(error)
+			if(confirm("Are you sure you want to delete this class?")){
+				if(Router.current().data().classes._id == this._id)
 					{
-						console.log(error);
+						Meteor.call("deleteClass", {classId: this._id}, function(error)
+						{
+							if(error)
+							{
+								console.log(error);
+							}
+							else
+							{
+								Router.go("splashPage");
+							}
+						});
 					}
 					else
 					{
-						Router.go("splashPage");
+						Meteor.call("deleteClass", {classId: this._id}, function(error)
+						{
+							if(error)
+							{
+								console.log(error);
+							}
+						});
 					}
-				});
 			}
-			else
-			{
-				Meteor.call("deleteClass", {classId: this._id}, function(error)
-				{
-					if(error)
-					{
-						console.log(error);
-					}
-				});
-			}
+			event.preventDefault()
 			//Router.go("classPage", {"classId": this._id});
 		}
 	});
