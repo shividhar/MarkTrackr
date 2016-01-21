@@ -12,11 +12,6 @@ html, body
 	from { opacity: 0; }
 	to { opacity: 1; }
 }
-@keyframes bigLoginHover
-{
-	from { background-color: #EE964B; }
-	to { background-color: #F95738 }
-}
 
 #content
 {
@@ -82,24 +77,30 @@ html, body
 	text-align: center;
 	padding-top: 5px;
 	padding-bottom: 10px;
-	background-color: #EE964B;
-	color: black;
 	margin-top: 20px;
 	font-size: 25px;
 	width: 300px;
 	height: 30px;
 	margin-left: auto;
 	margin-right: auto;
-	-o-transition:.5s;
-	-ms-transition:.5s;
-	-moz-transition:.5s;
-	-webkit-transition:.5s;
-	transition:.5s;
 }
 
-#bigLogin:hover
+#noClassViewed
 {
-	background-color: #F95738;
+	width: calc(100% - 201px);
+	height: calc(100% - 52px);
+	background-color: #082744;
+	text-align: center;
+	
+	float: right;
+}
+#noClassViewedText
+{
+	color: #FAF0CA;
+	font-size: 35;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 #splashBottom
