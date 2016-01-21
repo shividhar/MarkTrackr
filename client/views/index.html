@@ -65,6 +65,74 @@
 				</div>
 			</div>
 		</div>
+		<div id='editClassPanel' style='display: {{editingClassVisibility}}'>
+			<input id='editClassNameField' type='text'/><br>
+			<div id='editClassBottomDivision'>
+				<div id='editClassCategoryWeights'>
+					<div id='editClassCategoryWeightsTitle'>
+						Category Percentages
+					</div>
+					<div id='editClassCategoryWeightsContainer'>
+						<div id='editClassKnowledge'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								K:
+								<input id='editClassKnowledgeInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='editClassThinking'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								T:
+								<input id='editClassThinkingInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='editClassCommunication'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								C:
+								<input id='editClassCommunicationInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+						<div id='createClassApplication'>
+							<div style='position: relative; top: calc(50% - 10.5px)'>
+								A:
+								<input id='editClassApplicationInput' type="number" min='0' max='100' value='25' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id='editClassAssessmentWeightTypesList'>
+					<div id='editClassAssessmentWeightTypesListTitle'>
+						Assessment Weight Types
+					</div>
+					<div>
+						<div id='ecawtNameTitle'>
+							Name
+						</div>
+						<div id='ecawtCategoriesTitle'>
+							K T C A
+						</div>
+						<div id='ecawtWeightTitle'>
+							Weight
+						</div>
+					</div>
+					<div  id='editClassAssessmentWeightTypesListScrolling'>
+						{{#each ecawt}}
+							{{> ecawtTemplate}}
+						{{/each}}
+						<div id='editCCAWT'>
+							<svg width='20' height='20' viewBox='0 0 1 1'>
+								<line x1='.5' x2='.5' y1='0' y2='1' stroke='gray' stroke-width='.15'/>
+								<line y1='.5' y2='.5' x1='0' x2='1' stroke='gray' stroke-width='.15'/>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id='editClassButtonContainer'>
+				<input id='editClassButton' type='button' value='Finish'/>
+			</div>
+			<div id='editClassError'>
+			</div>
+		</div>
 		<div id='createClassPanel' style='display: {{createClassVisibility}}'>
 			<input id='createClassNameField' type='text'/><br>
 			<div id='createClassBottomDivision'>
@@ -202,6 +270,29 @@
 	</div>
 </template>
 
+<template name='ecawtTemplate'>
+	<div id='ecawt'>
+		<input class='ecawtName' type='text' value='{{ecawtName}}'/>
+		<input class='ecawtWeight' type='number' value='{{ecawtWeight}}'/>
+		<div class='ecawtKCont'>
+			<input class='ecawtK' type='checkBox' {{ecawtKHelper}}/>
+		</div>
+		<div class='ecawtTCont'>
+			<input class='ecawtT' type='checkBox' {{ecawtTHelper}}/>
+		</div>
+		<div class='ecawtCCont'>
+			<input class='ecawtC' type='checkBox' {{ecawtCHelper}}/>
+		</div>
+		<div class='ecawtACont'>
+			<input class='ecawtA' type='checkBox' {{ecawtAHelper}}/>
+		</div>
+		<svg class='ccawtRemove' width='20' height='20' viewBox='0 0 1 1'>
+			<line x1='0' x2='1' y1='0' y2='1' stroke='black' stroke-width='.15' />
+			<line x1='0' x2='1' y1='1' y2='0' stroke='black' stroke-width='.15' />
+		</svg>
+	</div>
+</template>
+
 <template name='editAssessmentWeightTypeOption'>
 	<option value='{{typeName}}'>{{typeName}}</option>
 </template>
@@ -249,7 +340,12 @@
 	<div id='main'>
 		<div id='top'>
 			<input id='className' value='{{className}}'/><br>
-			<canvas id='percentage' width='400' height='400'></canvas>
+			<canvas id='percentage' width='400' height='400'></canvas><br>
+			<svg id='classEditSymbol' width='25' height='25' viewBox='0 0 1 1'>
+				<polygon points='1,0 .67,.1 .89,.31' fill='#FAF0CA'/>
+				<polygon points='.87,.37 .63,.13 .13,.63 .37,.87' fill='#FAF0CA'/>
+				<polygon points='.34,.91 .1,.66 -.05,.77 .22,1.05' fill='#FAF0CA'/>
+			</svg>
 		</div>
 		<div id='bottom'>
 			<div id='assessmentsTitle'>

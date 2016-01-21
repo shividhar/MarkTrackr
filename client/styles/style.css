@@ -510,6 +510,190 @@ html, body
 	margin-bottom: 15px;
 }
 
+#editClassPanel
+{
+	width: 400px;
+	height: 300px;
+	position: relative;
+	top: calc(50% - 150px);
+	background-color: white;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#editClassNameField
+{
+	width: calc(100%);
+	border: 0;
+	outline: none;
+	text-align: center;
+	font-size: 25px;
+	margin-top: 10px;
+}
+
+#editClassBottomDivision
+{
+	width: 100%;
+	margin-top: 10px;
+	height: calc(100% - 81px);
+}
+
+#editClassCategoryWeights
+{
+	width: 100px;
+	height: calc(100% - 41px);
+	background-color: #DDDDDD;
+	padding-top: 15px;
+	float:left;
+}
+#editClassCategoryWeightsTitle
+{
+	margin-bottom: 10px;
+}
+#editClassCategoryWeightsContainer
+{
+	width: 100%;
+	height: calc(100% - 28px);
+	background-color: #BBBBBB;
+}
+#editClassKnowledge
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #6BB145;
+}
+#editClassThinking
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #F0B21A;
+}
+#editClassCommunication
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #3FA3BB;
+}
+#editClassApplication
+{
+	width: 100%;
+	height: calc(100% / 4);
+	background-color: #D14628;
+}
+#editClassAssessmentWeightTypesList
+{
+	width: calc(100% - 101px);
+	height:100%;
+	float:right;
+	background-color: #DDDDDD;
+	border-left: 1px black solid;
+}
+#editClassAssessmentWeightTypesListTitle
+{
+	width: 100%;
+	margin-top: 15px;
+	text-align: center;
+}
+#ecawtNameTitle
+{
+	float: left;
+	margin-top: 5px;
+	margin-left: 5px;
+}
+#ecawtWeightTitle
+{
+	float: right;
+	margin-top: 5px;
+	margin-right: 15px;
+}
+#ecawtCategoriesTitle
+{
+	float: right;
+	margin-top: 5px;
+	margin-right: 45px;
+}
+#editClassAssessmentWeightTypesListScrolling
+{
+	width: 100%;
+	height: calc(100% - 56px);
+	margin-top: 10px;
+	overflow-y: scroll;
+	clear: both;
+}
+#ecawt
+{
+	width: 100%;
+	height: 20px;
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	background-color: #BBBBBB;
+}
+.ecawtName
+{
+	width: calc(100% - 154px);
+	padding: 0;
+	border: 0;
+	border-bottom: 1px solid black;
+	background-color: #BBBBBB;
+	outline: none;
+	margin: 0;
+	float: left;
+	margin-right: 3px;
+	margin-left: 3px;
+}
+.ecawtWeight
+{
+	width: 40px;
+	padding: 0;
+	border: 0;
+	border-bottom: 1px solid black;
+	background-color: #BBBBBB;
+	outline: none;
+	margin: 0;
+	float: left;
+	margin-right: 3px;
+}
+.ecawtKCont
+{
+	background-color: #6BB145;
+	float: left;
+}
+.ecawtTCont
+{
+	background-color: #F0B21A;
+	float: left;
+}
+.ecawtCCont
+{
+	background-color: #3FA3BB;
+	float: left;
+}
+.ecawtACont
+{
+	background-color: #D14628;
+	float: left;
+}
+.ecawtRemove
+{
+	float: left;
+	margin-left: 3px;
+}
+#editCCAWT
+{
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+	background-color: #CCCCCC;
+	width: 100%;
+	height: 20px;
+}
+#editClassButtonContainer
+{
+	width: 100%;
+	height: 25.5px;
+	padding-top: 4.5px;
+}
+
 #createClassPanel
 {
 	width: 400px;

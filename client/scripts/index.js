@@ -58,6 +58,11 @@ if (Meteor.isClient)
 			return Session.get('ccawt');
 		}
 
+		, ecawt : function()
+		{
+			return Session.get('ecawt');
+		}
+
 		, editingAssessmentWeightTypeOptions: function()
 		{
 			if(this.classes)
@@ -81,11 +86,6 @@ if (Meteor.isClient)
 				Session.set('showCreateClassPanel', false);
 				Session.set('showCreateAssessmentPanel', false);
 			}
-		}
-
-		, 'click #editAssessmentPanel' : function(event)
-		{
-
 		}
 
 		, 'click #classCreate' : function(event)
@@ -409,6 +409,108 @@ if (Meteor.isClient)
 				});
 			}
 		}
+
+		, 'change #editClassButton': function(event)
+		{
+			var n = $('#editClassNameField').val();
+			if(n == "")
+			{
+				$('#editClassNameField').val(Classes.findOne({_id: this.classes._id}).title);
+				return;
+			}
+			var atRaw = Session.get('ecawt');
+			if(atRaw.length == 0)
+			{
+				$('#editClassError').html("No assessment types!");
+				return;
+			}
+			var at = new Array(atRaw.length);
+			for(var i = 0; i < atRaw.length; i++)
+			{
+				at[i] = { typeName: atRaw[i].ecawtName, weight: atRaw[i].ecawtWeight, categories: atRaw[i].categories };
+			}
+
+			var k = $('#editClassKnowledgeInput').val();
+			var t = $('#editClassThinkingInput').val();
+			var c = $('#editClassCommunicationInput').val();
+			var a = $('#editClassApplicationInput').val();
+
+			if(k < 0 || t < 0 || c < 0 || a < 0)
+			{
+				$('#editClassError').html("Some categories are negative!");
+				return;
+			}
+			if(k+t+c+a != 100)
+			{
+				$('#editClassError').html("Categories do not add up to 100%!");
+				return;	
+			}
+			Meteor.call('changeClassTitle', {classId: this.classes._id, newTitle: n}, function(error)
+			{
+				if(error)
+				{
+					$('#editClassError').html("" + error);
+					return;
+				}
+				else
+				{
+					Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: k, categoryName: "knowledge"}, function(error)
+					{
+						if(error)
+						{
+							$('#editClassError').html("" + error);
+							return;
+						}
+						else
+						{
+							Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: t, categoryName: "thinking"}, function(error)
+							{
+								if(error)
+								{
+									$('#editClassError').html("" + error);
+									return;
+								}
+								else
+								{
+									Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: c, categoryName: "communication"}, function(error)
+									{
+										if(error)
+										{
+											$('#editClassError').html("" + error);
+											return;
+										}
+										else
+										{
+											Meteor.call('changeClassCategoryWeighting', {classId: this.classes._id, categoryWeightToChange: a, categoryName: "application"}, function(error)
+											{
+												if(error)
+												{
+													$('#editClassError').html("" + error);
+													return;
+												}
+												else
+												{
+													// YAY
+												}
+											});
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+			/*
+			Meteor.call('changeAssessmentTitle', {assessmentId: Session.get('editingAssessmentId')._id, newTitle: n}, function(error)
+			{
+				if(error)
+				{
+					console.log(error);
+					$('#editAssessmentNameField').val(Session.get('editingAssessmentId').title);
+				}
+			});*/
+		}
 	});
 
 	Template.classElement.events({
@@ -465,6 +567,25 @@ if (Meteor.isClient)
 			return (this.categories.indexOf('communication') != -1 ? "checked" : "");
 		}
 		, ccawtAHelper: function()
+		{
+			return (this.categories.indexOf('application') != -1 ? "checked" : "");
+		}
+	});
+
+	Template.ecawtTemplate.helpers({
+		ecawtKHelper: function()
+		{
+			return (this.categories.indexOf('knowledge') != -1 ? "checked" : "");
+		}
+		, ecawtTHelper: function()
+		{
+			return (this.categories.indexOf('thinking') != -1 ? "checked" : "");
+		}
+		, ecawtCHelper: function()
+		{
+			return (this.categories.indexOf('communication') != -1 ? "checked" : "");
+		}
+		, ecawtAHelper: function()
 		{
 			return (this.categories.indexOf('application') != -1 ? "checked" : "");
 		}
@@ -638,6 +759,174 @@ if (Meteor.isClient)
 		}
 	});
 
+	Template.ecawtTemplate.events({
+		'change .ecawtName': function(event)
+		{
+			if($(event.target).val() == "")
+			{
+				$(event.target).val(this.ecawtName);
+			}
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					n[i].ecawtName = $(event.target).val();
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'change .ecawtWeight': function(event)
+		{
+			var val = Number($(event.target).val());
+			if(val < 0)
+			{
+				val = Math.abs(val);
+			}
+			if(val == 0)
+			{
+				val = 1;
+			}
+			$(event.target).val(val);
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					n[i].ecawtWeight = $(event.target).val();
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'click .ecawtRemove': function(event)
+		{
+			var n = Session.get('ecawt').slice(0);
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					n.splice(i, 1);
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'click .ecawtK': function(event)
+		{
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					if($(event.target)[0].checked)
+					{
+						var x = n[i].categories.indexOf("knowledge");
+						if(x == -1)
+						{
+							n[i].categories.push("knowledge");
+						}
+					}
+					else
+					{
+						var x = n[i].categories.indexOf("knowledge");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
+					}
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'click .ecawtT': function(event)
+		{
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					if($(event.target)[0].checked)
+					{
+						var x = n[i].categories.indexOf("thinking");
+						if(x == -1)
+						{
+							n[i].categories.push("thinking");
+						}
+					}
+					else
+					{
+						var x = n[i].categories.indexOf("thinking");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
+					}
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'click .ecawtA': function(event)
+		{
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					if($(event.target)[0].checked)
+					{
+						var x = n[i].categories.indexOf("application");
+						if(x == -1)
+						{
+							n[i].categories.push("application");
+						}
+					}
+					else
+					{
+						var x = n[i].categories.indexOf("application");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
+					}
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+		, 'click .ecawtC': function(event)
+		{
+			var n = Session.get('ecawt');
+			for(var i = 0; i < n.length; i++)
+			{
+				if(n[i].rID == this.rID)
+				{
+					if($(event.target)[0].checked)
+					{
+						var x = n[i].categories.indexOf("communication");
+						if(x == -1)
+						{
+							n[i].categories.push("communication");
+						}
+					}
+					else
+					{
+						var x = n[i].categories.indexOf("communication");
+						if(x != -1)
+						{
+							n[i].categories.splice(x, 1);
+						}
+					}
+					break;
+				}
+			}
+			Session.set('ecawt', n);
+		}
+	});
+
 	Template.mainContent.rendered = function()
 	{
 		var percentageCanvas = $('#percentage');
@@ -660,123 +949,7 @@ if (Meteor.isClient)
 		"click #assessmentsTitle": function(event){
 			var currentClassId = this.classes._id;
 
-			// Segregating Assessment types with their respective categories
-				var knowledgeAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
-					return (assessmentTypeObject.categories.indexOf("knowledge") != -1)
-				})
-				var knowledgeAssessmentWeights = [];
-				var knowledgeAssessmentPercentages = [];
-
-				_.each(knowledgeAssessments, function(assessmentTypeObject){
-					var knowledgeIndex = assessmentTypeObject.categories.indexOf("knowledge");
-
-					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
-
-					_.each(assessments, function(assessmentObject){
-						knowledgeAssessmentWeights.push(assessmentTypeObject.weight);
-						knowledgeAssessmentPercentages.push(assessmentObject.categoryPercentages[knowledgeIndex]);
-					})
-				})
-				//###########
-				var thinkingAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
-					return (assessmentTypeObject.categories.indexOf("thinking") != -1)
-				})
-				var thinkingAssessmentWeights = [];
-				var thinkingAssessmentPercentages = [];
-
-				_.each(thinkingAssessments, function(assessmentTypeObject){
-					var thinkingIndex = assessmentTypeObject.categories.indexOf("thinking");
-
-					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
-					
-					_.each(assessments, function(assessmentObject){
-						thinkingAssessmentWeights.push(assessmentTypeObject.weight);
-						thinkingAssessmentPercentages.push(assessmentObject.categoryPercentages[thinkingIndex]);
-					})
-				})
-				//###########
-				var communicationAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
-					return (assessmentTypeObject.categories.indexOf("communication") != -1)
-				})
-				var communicationAssessmentWeights = [];
-				var communicationAssessmentPercentages = [];
-
-				_.each(communicationAssessments, function(assessmentTypeObject){
-					var communicationIndex = assessmentTypeObject.categories.indexOf("communication");
-
-					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
-					
-					_.each(assessments, function(assessmentObject){
-						communicationAssessmentWeights.push(assessmentTypeObject.weight);
-						communicationAssessmentPercentages.push(assessmentObject.categoryPercentages[communicationIndex]);
-					})
-				})
-				//###########
-				var applicationAssessments = _.filter(this.classes.assessmentTypes, function(assessmentTypeObject){
-					return (assessmentTypeObject.categories.indexOf("application") != -1)
-				})
-				var applicationAssessmentWeights = [];
-				var applicationAssessmentPercentages = [];
-
-				_.each(applicationAssessments, function(assessmentTypeObject){
-					var applicationIndex = assessmentTypeObject.categories.indexOf("application");
-
-					var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
-					
-					_.each(assessments, function(assessmentObject){
-						applicationAssessmentWeights.push(assessmentTypeObject.weight);
-						applicationAssessmentPercentages.push(assessmentObject.categoryPercentages[applicationIndex]);
-					})
-				})
-
-			// Calculating total weights for each category
-
-				var totalKnowledgeWeight = 0,
-					totalThinkingWeight = 0,
-					totalCommunicationWeight = 0,
-					totalApplicationWeight = 0;
-				for(var x = 0; x < knowledgeAssessmentWeights.length; x++){
-					totalKnowledgeWeight += knowledgeAssessmentWeights[x];
-				}
-
-				for(var x = 0; x < thinkingAssessmentWeights.length; x++){
-					totalThinkingWeight += thinkingAssessmentWeights[x];
-				}
-
-				for(var x = 0; x < communicationAssessmentWeights.length; x++){
-					totalCommunicationWeight += communicationAssessmentWeights[x];
-				}
-
-				for(var x = 0; x < applicationAssessmentWeights.length; x++){
-					totalApplicationWeight += applicationAssessmentWeights[x];
-				}
-
-			// Calculating weighted averages for every category
-				var weightedKnowledgeAverage = 0,
-					weightedThinkingAverage = 0,
-					weightedCommunicationAverage = 0,
-					weightedApplicationAverage = 0;
-
-				for(var x = 0; x < knowledgeAssessmentPercentages.length; x++){
-					weightedKnowledgeAverage += knowledgeAssessmentPercentages[x] * (knowledgeAssessmentWeights[x] / totalKnowledgeWeight);
-				}
-
-				for(var x = 0; x < thinkingAssessmentPercentages.length; x++){
-					weightedThinkingAverage += thinkingAssessmentPercentages[x] * (thinkingAssessmentWeights[x] / totalThinkingWeight);
-				}
-
-				for(var x = 0; x < communicationAssessmentPercentages.length; x++){
-					weightedCommunicationAverage += communicationAssessmentPercentages[x] * (communicationAssessmentWeights[x] / totalCommunicationWeight);
-				}
-
-				for(var x = 0; x < applicationAssessmentPercentages.length; x++){
-					weightedApplicationAverage += applicationAssessmentPercentages[x] * (applicationAssessmentWeights[x] / totalApplicationWeight);
-				}
-				
-			// Calculating total average	
-
-			var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
-
+			
 			return false
 		},
 		'change #className': function(event)
@@ -804,6 +977,24 @@ if (Meteor.isClient)
 			$('#createCommunicationPercent').prop('disabled', assessType.categories.indexOf('communication') == -1);
 			$('#createApplicationPercent').prop('disabled', assessType.categories.indexOf('application') == -1);
 			//Meteor.call("createAssessment", {title: "AssessmentSmith", parentClassId: this.classes._id, type: })
+		}
+		, 'click #classEditSymbol': function(event)
+		{
+			Session.set('showEditClassPanel', true);
+			var classData = Classes.findOne({_id: this.classes._id});
+
+			$('#editClassNameField').val(classData.title);
+			$('#editClassKnowledgeInput').val(classData.categoryWeightings[0]);
+			$('#editClassThinkingInput').val(classData.categoryWeightings[1]);
+			$('#editClassCommunicationInput').val(classData.categoryWeightings[3]);
+			$('#editClassApplicationInput').val(classData.categoryWeightings[2]);
+
+			var at = new Array(classData.assessmentTypes.length);
+			for(var i = 0; i < at.length; i++)
+			{
+				at[0] = { ecawtName: classData.assessmentTypes[i].typeName, ecawtWeight: classData.assessmentTypes[i].weight, categories: classData.assessmentTypes[i].categories, rID: Math.floor(Math.random() * 10000) };
+			}
+			Session.set('ecawt', at);
 		}
 	});
 
@@ -1098,6 +1289,127 @@ if (Meteor.isClient)
 			});
 		}
 	});
+}
+
+function calculatePercentages(t)
+{
+	// Segregating Assessment types with their respective categories
+	var knowledgeAssessments = _.filter(t.classes.assessmentTypes, function(assessmentTypeObject){
+		return (assessmentTypeObject.categories.indexOf("knowledge") != -1)
+	})
+	var knowledgeAssessmentWeights = [];
+	var knowledgeAssessmentPercentages = [];
+
+	_.each(knowledgeAssessments, function(assessmentTypeObject){
+		var knowledgeIndex = assessmentTypeObject.categories.indexOf("knowledge");
+
+		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+
+		_.each(assessments, function(assessmentObject){
+			knowledgeAssessmentWeights.push(assessmentTypeObject.weight);
+			knowledgeAssessmentPercentages.push(assessmentObject.categoryPercentages[knowledgeIndex]);
+		})
+	})
+	//###########
+	var thinkingAssessments = _.filter(t.classes.assessmentTypes, function(assessmentTypeObject){
+		return (assessmentTypeObject.categories.indexOf("thinking") != -1)
+	})
+	var thinkingAssessmentWeights = [];
+	var thinkingAssessmentPercentages = [];
+
+	_.each(thinkingAssessments, function(assessmentTypeObject){
+		var thinkingIndex = assessmentTypeObject.categories.indexOf("thinking");
+
+		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		
+		_.each(assessments, function(assessmentObject){
+			thinkingAssessmentWeights.push(assessmentTypeObject.weight);
+			thinkingAssessmentPercentages.push(assessmentObject.categoryPercentages[thinkingIndex]);
+		})
+	})
+	//###########
+	var communicationAssessments = _.filter(t.classes.assessmentTypes, function(assessmentTypeObject){
+		return (assessmentTypeObject.categories.indexOf("communication") != -1)
+	})
+	var communicationAssessmentWeights = [];
+	var communicationAssessmentPercentages = [];
+
+	_.each(communicationAssessments, function(assessmentTypeObject){
+		var communicationIndex = assessmentTypeObject.categories.indexOf("communication");
+
+		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		
+		_.each(assessments, function(assessmentObject){
+			communicationAssessmentWeights.push(assessmentTypeObject.weight);
+			communicationAssessmentPercentages.push(assessmentObject.categoryPercentages[communicationIndex]);
+		})
+	})
+	//###########
+	var applicationAssessments = _.filter(t.classes.assessmentTypes, function(assessmentTypeObject){
+		return (assessmentTypeObject.categories.indexOf("application") != -1)
+	})
+	var applicationAssessmentWeights = [];
+	var applicationAssessmentPercentages = [];
+
+	_.each(applicationAssessments, function(assessmentTypeObject){
+		var applicationIndex = assessmentTypeObject.categories.indexOf("application");
+
+		var assessments = Assessments.find({"parentClassId": currentClassId, "authorId": Meteor.userId(), "type": assessmentTypeObject.typeName}).fetch();
+		
+		_.each(assessments, function(assessmentObject){
+			applicationAssessmentWeights.push(assessmentTypeObject.weight);
+			applicationAssessmentPercentages.push(assessmentObject.categoryPercentages[applicationIndex]);
+		})
+	})
+
+// Calculating total weights for each category
+
+	var totalKnowledgeWeight = 0,
+		totalThinkingWeight = 0,
+		totalCommunicationWeight = 0,
+		totalApplicationWeight = 0;
+	for(var x = 0; x < knowledgeAssessmentWeights.length; x++){
+		totalKnowledgeWeight += knowledgeAssessmentWeights[x];
+	}
+
+	for(var x = 0; x < thinkingAssessmentWeights.length; x++){
+		totalThinkingWeight += thinkingAssessmentWeights[x];
+	}
+
+	for(var x = 0; x < communicationAssessmentWeights.length; x++){
+		totalCommunicationWeight += communicationAssessmentWeights[x];
+	}
+
+	for(var x = 0; x < applicationAssessmentWeights.length; x++){
+		totalApplicationWeight += applicationAssessmentWeights[x];
+	}
+
+// Calculating weighted averages for every category
+	var weightedKnowledgeAverage = 0,
+		weightedThinkingAverage = 0,
+		weightedCommunicationAverage = 0,
+		weightedApplicationAverage = 0;
+
+	for(var x = 0; x < knowledgeAssessmentPercentages.length; x++){
+		weightedKnowledgeAverage += knowledgeAssessmentPercentages[x] * (knowledgeAssessmentWeights[x] / totalKnowledgeWeight);
+	}
+
+	for(var x = 0; x < thinkingAssessmentPercentages.length; x++){
+		weightedThinkingAverage += thinkingAssessmentPercentages[x] * (thinkingAssessmentWeights[x] / totalThinkingWeight);
+	}
+
+	for(var x = 0; x < communicationAssessmentPercentages.length; x++){
+		weightedCommunicationAverage += communicationAssessmentPercentages[x] * (communicationAssessmentWeights[x] / totalCommunicationWeight);
+	}
+
+	for(var x = 0; x < applicationAssessmentPercentages.length; x++){
+		weightedApplicationAverage += applicationAssessmentPercentages[x] * (applicationAssessmentWeights[x] / totalApplicationWeight);
+	}
+	
+// Calculating total average	
+
+var totalAverage = (weightedKnowledgeAverage + weightedThinkingAverage + weightedCommunicationAverage + weightedApplicationAverage) / 4;
+
 }
 
 function generatePercentageCircle(canvas, radius, clearRadius, percentage, colour, border, borderWidth, textColour)
